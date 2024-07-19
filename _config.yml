@@ -1,7 +1,0 @@
-url: "https://meowsus.github.io"
-baseurl: "meowsus.github.io"
-title: "Curt Howard's Portfolio"
-plugins:
-  - jekyll-postcss
-postcss:
-  cache: false
