@@ -1,8 +1,15 @@
 ---
 layout: default
-title: "Happy Jekylling!"
+title: Coming soon
 ---
 
-## You're ready to go!
+## Coming soon
 
-Start developing your Jekyll website.
+Here's a cat while you wait:
+
+<pre>
+ |\__/,|   (`\
+ |_ _  |.--.) )
+ ( T   )     /
+(((^_(((/(((_/
+</pre>
