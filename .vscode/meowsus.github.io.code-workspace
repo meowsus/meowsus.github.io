@@ -1,7 +1,16 @@
 {
-	"folders": [
-		{
-			"path": ".."
-		}
-	]
+  "folders": [
+    {
+      "path": "..",
+    },
+  ],
+  "settings": {
+    "files.associations": {
+      "*.html": "liquid",
+    },
+    "[liquid]": {
+      "editor.defaultFormatter": "Shopify.theme-check-vscode",
+      "editor.formatOnSave": true,
+    },
+  },
 }
