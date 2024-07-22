@@ -5,12 +5,8 @@
     },
   ],
   "settings": {
-    "files.associations": {
-      "*.html": "liquid",
-    },
-    "[liquid]": {
-      "editor.defaultFormatter": "Shopify.theme-check-vscode",
-      "editor.formatOnSave": true,
-    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "cSpell.enableFiletypes": ["liquid"],
   },
 }
