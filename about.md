@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Will Code For Food - A Curt Howard Story
-content_class_names: "prose lg:prose-xl max-w-full"
+content_class_names: "prose lg:prose-lg max-w-full"
 ---
 
 I began my professional career in 2003, slangin' HTML for Big Pharma. My mother worked at Merck, see, and she got me the interview after finding a job posting in their internal circular that was left on the floor of the bathroom at her office. The guy who interviewed me reminded me of Joe Pesci &mdash; like, <em>a lot</em> &mdash; but something in the chubby punk kid who sat before him made him say, "let's do this."
