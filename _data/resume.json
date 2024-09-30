@@ -1,0 +1,256 @@
+{
+  "basics": {
+    "name": "Curt Howard",
+    "label": "Software Engineer",
+    "image": "https://avatars.githubusercontent.com/u/1037252?v=4",
+    "email": "tooblies@gmail.com",
+    "phone": "(505) 672-8266",
+    "url": "https://meowsus.github.io",
+    "summary": "A highly adaptable and self-aware software engineer with over 20 years of experience building scalable, high-performance mobile and web applications. My passion lies in driving product innovation and engineering team efficiency, with a focus on clear communication and low-ego collaboration.",
+    "location": {
+      "address": "5615 SE Powell Blvd",
+      "postalCode": "OR 97206",
+      "city": "Portland",
+      "countryCode": "US",
+      "region": "Oregon"
+    },
+    "profiles": [
+      {
+        "network": "Github",
+        "username": "meowsus",
+        "url": "https://github.com/meowsus"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "hurt-coward",
+        "url": "https://linkedin.com/in/hurt-coward"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Convictional",
+      "position": "Staff Software Engineer",
+      "url": "https://convictional.com",
+      "startDate": "2021-12-01",
+      "endDate": "2024-08-01",
+      "summary": "Became the head of UI/UX Development with a focus on engineering productivity to ensure product feature development was maximally efficient.",
+      "highlights": [
+        "Architected the frontend of the product",
+        "Mentored others through code review and documentation",
+        "Developed and maintained an in-house component library"
+      ]
+    },
+    {
+      "name": "Tophatter",
+      "position": "Senior Software Engineer",
+      "url": "https://tophatter.com",
+      "startDate": "2020-02-01",
+      "endDate": "2021-12-01",
+      "summary": "Built a gamified shopping experience for a popular auction mobile application.",
+      "highlights": [
+        "Fast paced work environment",
+        "Mastered React, Redux, and TypeScript",
+        "Data-driven feature development & experimentation"
+      ]
+    },
+    {
+      "name": "Workarea",
+      "position": "Senior Software Engineer",
+      "url": "https://workarea.com",
+      "startDate": "2013-08-01",
+      "endDate": "2020-02-01",
+      "summary": "Built and managed many high-profile commerce websites before building a high performance, open source commerce platform.",
+      "highlights": [
+        "Mastered MVC architecture",
+        "Mastered end-to-end product development",
+        "Wrote self-documenting, extensible code",
+        "Cultivated feedback loops with platform implementors"
+      ]
+    },
+    {
+      "name": "I-SITE",
+      "position": "Software Engineer",
+      "url": "https://i-site.com",
+      "startDate": "2012-01-01",
+      "endDate": "2013-08-01",
+      "summary": "Built and managed many non-profit mobile and web applications rapidly on a very small team.",
+      "highlights": [
+        "Managed my first large-scale project",
+        "Mastered designer/engineer communication"
+      ]
+    },
+    {
+      "name": "Pepperlillie",
+      "position": "Principal Web Developer",
+      "url": "https://pepperlillie.com",
+      "startDate": "2008-01-01",
+      "endDate": "2012-12-01",
+      "summary": "Built and managed beautifully designed small-to-medium sized boutique websites in this entrepreneurial partnership.",
+      "highlights": [
+        "Became part owner of the company",
+        "Learned the definition of 'good enough'"
+      ]
+    },
+    {
+      "name": "IntuitSolutions",
+      "position": "Staff Web Developer",
+      "url": "https://intuitsolutions.com",
+      "startDate": "2004-01-01",
+      "endDate": "2007-12-01",
+      "summary": "Built and managed the custom storefronts of over 200 customers using eBay ProStores & BigCommerce.",
+      "highlights": [
+        "Fast paced work environment",
+        "Optimized websites for search visibility",
+        "Established important customer feedback loops"
+      ]
+    },
+    {
+      "name": "Johnson & Johnson",
+      "position": "Web Developer",
+      "url": "https://jnj.com",
+      "startDate": "2003-01-01",
+      "endDate": "2003-12-01",
+      "summary": "Converted an internal quality assurance website into the company's new content management system.",
+      "highlights": []
+    },
+    {
+      "name": "Merck",
+      "position": "Web Developer",
+      "url": "https://merck.com",
+      "startDate": "2004-01-01",
+      "endDate": "2007-12-01",
+      "summary": "Converted many internal department websites from ColdFusion to static HTML, CSS, and JavaScript.",
+      "highlights": []
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Puddletown Montessori School",
+      "position": "Volunteer",
+      "url": "https://puddletownschool.com/",
+      "startDate": "2018-01-01",
+      "endDate": "2024-09-01",
+      "summary": "Worked with the administrative team to provide maintenance for their parent portal application",
+      "highlights": ["Community building"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University",
+      "url": "https://www.mc3.edu/",
+      "area": "Computer Science",
+      "studyType": "Associate's",
+      "startDate": "2001-01-01",
+      "endDate": "2003-12-01",
+      "score": "4.8",
+      "courses": []
+    },
+    {
+      "institution": "University",
+      "url": "https://www.temple.edu/",
+      "area": "Computer Science",
+      "studyType": "Continuing Bachelor's",
+      "startDate": "2003-01-01",
+      "endDate": "2004-12-01",
+      "score": "4.5",
+      "courses": []
+    }
+  ],
+  "awards": [],
+  "certificates": [],
+  "publications": [],
+  "skills": [
+    {
+      "name": "Web Development",
+      "level": "Master",
+      "keywords": ["Semantic HTML", "CSS", "JavaScript", "A11Y"]
+    },
+    {
+      "name": "Mobile App Development",
+      "level": "Advanced",
+      "keywords": ["React Native", "Expo", "Metro"]
+    },
+    {
+      "name": "UI/UX Engineering",
+      "level": "Advanced",
+      "keywords": ["React", "Redux", "NextJS", "TailwindCSS", "Storybook"]
+    },
+    {
+      "name": "Backend Engineering",
+      "level": "Moderate",
+      "keywords": ["Ruby", "Python", "Golang", "PHP"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Pinball",
+      "keywords": ["Tournaments", "#1 DAD"]
+    },
+    {
+      "name": "Art",
+      "keywords": ["Pen & Ink Drawing", "Sculpture"]
+    },
+    {
+      "name": "Music",
+      "keywords": ["Drumming", "Classical Guitar", "Audio Engineering"]
+    },
+    {
+      "name": "Reading",
+      "keywords": ["Western Esoterica", "Alternative Psychology", "Comic books"]
+    }
+  ],
+  "references": [
+    {
+      "name": "Roger Kirkness (CEO @ Convictional)",
+      "reference": "I highly recommend Curt on the basis of competence, character, detail orientation, and overall frontend engineering ability. I'm happy to provide a more detailed reference over email, and could not recommend him more highly."
+    },
+    {
+      "name": "Prentice Bjerkeseth (Engineering Manager @ Convictional)",
+      "reference": "Reference…"
+    },
+    {
+      "name": "Jason Hill (CTO @ Workarea)",
+      "reference": "Reference…"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Workarea Commerce",
+      "startDate": "2013-01-01",
+      "endDate": "2019-01-01",
+      "description": "An enterprise-grade commerce platform written in Ruby on Rails.",
+      "highlights": ["OOS", "Online commerce"],
+      "url": "https://github.com/workarea-commerce/workarea"
+    },
+    {
+      "name": "Feature.js",
+      "startDate": "2021-01-01",
+      "endDate": "2022-01-01",
+      "description": "Feature.js is a fast, simple and lightweight browser feature detection library.",
+      "highlights": ["OOS"],
+      "url": "https://github.com/arielsalminen/feature.js"
+    },
+    {
+      "name": "Wagemage",
+      "startDate": "2019-01-01",
+      "endDate": "2024-01-01",
+      "description": "A CLI for making changes to many GitHub-hosted git repositories.",
+      "highlights": ["Productivity tooling"],
+      "url": "https://github.com/meowsus/wagemage"
+    },
+    {
+      "name": "FauxFetus.net",
+      "startDate": "2003-01-01",
+      "description": "A pre-Bandcamp experimental music collective website generated entirely by ID3 audio metadata",
+      "highlights": ["Community building"],
+      "url": "https://github.com/meowsus/fauxfetus.net"
+    }
+  ]
+}
