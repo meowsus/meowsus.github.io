@@ -1,6 +1,15 @@
 ---
 layout: default
-title: Will Code For Food - A Curt Howard Story
 ---
 
-<h1>Reacticles</h1>
+<ul class="list-disc ml-4">
+  {% for post in site.posts %}
+  <li>
+    <a class="link" href="{{ post.url }}"
+      >{{ post.date | date: "%B %-d, %Y" }}</a
+    >
+    -
+    <strong>{{post.title}}</strong> {{ post.excerpt | strip_html }}
+  </li>
+  {% endfor %}
+</ul>
