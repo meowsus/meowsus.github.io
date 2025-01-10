@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>
+      Knip
+      -
+      /dev/blog
+    </title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    >
+  </head>
+  <body class="bg-slate-200">
+    <main class="container p-4">
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold text-slate-900">
+          <a class="text-blue-700 underline visited:text-blue-600 hover:text-blue-500" href="/">/dev/blog</a>
+        </h1>
+      </header>
+
+      <main class=""><article>
+  <header class="mb-8">
+    <h1 class="text-2xl">Knip</h1>
+    <p>
+      <time datetime="2025-01-09T00:00:00+00:00">January 9, 2025</time>
+    </p>
+  </header>
+  <section class="prose">
+    <p>At <a href="https://ampwall.com">Ampwall</a>, where I’ve been helping out since my layoff at <a href="https://convictional.com">Convictional</a> in August last year, we’ve decided to migrate from a regular <code class="language-plaintext highlighter-rouge">npm</code> project over to a <code class="language-plaintext highlighter-rouge">pnpm</code>-based monorepo. We decided to do this because our worker architecture relies too heavily on our underlying app architecture when, really, there’s no good reason for this.</p>
+
+<p>The proposal was relatively straightforward: break out our app into three separate packages. These would be <code class="language-plaintext highlighter-rouge">ampwall-app</code>, <code class="language-plaintext highlighter-rouge">ampwall-shared</code>, and <code class="language-plaintext highlighter-rouge">ampwall-workers</code> where “app” would depend on “shared” and “workers”, “workers” would depend on “shared”, and “shared” wouldn’t depend on either of the other two. In practice, however, that was easier said than done.</p>
+
+<p>After about 60 hours of obsessively brute-forcing my way though this migration I gave up. I work about 4 hours a day so this project lasted about three weeks, leading up to a two week break that I took at the end of last year. Normally, I wouldn’t obsess over something for so long, but my normal indicators of spike-failure were all out of whack. First, I am not working full days, so after the first week I decided to keep pushing forward. Actually, after the first week I had the project set up in <code class="language-plaintext highlighter-rouge">pnpm</code>, just not in a workspace yet, so the initial results looked promising. But after that first week reality started to fray at the edges. There were so many interconnected dependencies that <code class="language-plaintext highlighter-rouge">ampwall-shared</code> started to become a dumping ground for any and all code that currently was or might possibly be shared. This was unideal, truly, but I was also trying to make the migration minimally burdensome on our engineering team, i.e. “these folders are <em>always</em> ‘shared’” over “should I move this function in this file into ‘shared’?”</p>
+
+<p>I’m traversing down a long and painful storyline so I’ll stop here. Suffice it to say that the “Just Do It (tm)” mentality was an abject failure, however I did learn a lot. I wrote down the results of my failures in the ticket created for the work so that I’d have a touchstone when I, or hopefully our fearless leader, picked it up again. He didn’t, so I did when I got back. In summary, this touchstone allowed me to break the work down into manageable chunks, which are too numerous and irrelevant to mention now. The one I’m focusing on currently is…</p>
+
+<h1 id="knip">Knip</h1>
+
+<p><a href="https://knip.dev/">Knip</a> de-clutters your codebase. We want this for <a href="https://knip.dev/explanations/why-use-knip">all the reasons</a> but particularly for its ability to detect dead code, of which there is an unhealthy amount in our codebase. It’s a zero-to-one project led by one guy working as hard as he could for the last year and a half. With this dead code out of the way we can ensure that the files we’re going to get way fewer false indicators of dependencies when attempting to break apart our monorepo in the coming weeks.</p>
+
+<p>After running the init command (<code class="language-plaintext highlighter-rouge">npm init @knip/config</code>) I’m allowed to run <code class="language-plaintext highlighter-rouge">npm run knip</code> which gives me a bunch of things to fix. True story: I love this type of mundane work, especially now that my focus time has been halved due to nixing childcare for my kids in attempts to slow the bleed from my bank account.</p>
+
+<p>A lot of the output is actionable, but I immediately notice that <code class="language-plaintext highlighter-rouge">knip</code> doesn’t know about a few things in our codebase. It’s reporting that I can delete <code class="language-plaintext highlighter-rouge">panda.config.ts</code> and <code class="language-plaintext highlighter-rouge">pm2.config.js</code>, which I know would seriously compromise the project. We use <a href="https://panda-css.com/">Panda</a> for CSS-in-JS styles and <a href="https://pm2.keymetrics.io/">PM2</a> for our workers. Looking at <a href="https://knip.dev/explanations/plugins">knip’s plugins page</a>, I don’t see either package listed.</p>
+
+<p>Further down the list of things to clean up I see a lot of references to <code class="language-plaintext highlighter-rouge">src/spec/__generated__/fabbrica/index.js</code> under the “Unused exports” section. We depend on <a href="https://github.com/arkadiuszbachorski/fabbrica">Fabbrica</a> quite extensively for mocking our Prisma objects. This is unfortunate, since the project is no longer maintained, but it’s something I’ll still need to account for.</p>
+
+<p>Do I need to add configuration? Do I need to write custom plugins? Perusing the initial <a href="https://knip.dev/overview/configuration">configuration documentation</a> I am becoming woefully aware that I need a much deeper understanding of how knip works before I an answer these questions.</p>
+
+<h2 id="exploration">Exploration</h2>
+
+<p>After a bit of reading (starting with <a href="https://knip.dev/explanations/entry-files">entry files</a> and ending with <a href="https://knip.dev/guides/configuring-project-files">project configuration</a>) I’m pretty sure I figured out our Fabbrica issue. I’ll start there.</p>
+
+<p>As a side note, I’m very much a “learn as you do” type of engineer. I will throw myself into a package and learn by breaking things. It’s only after I have developed some muscle memory with a new package that I’ll go back and solidify what I’ve learned with documentation.</p>
+
+<p>Knip seems a bit less straightforward than most packages, likely due to its heavy reliance on community maintained plugins. So this time I’m reading as I’m working, which feels awkward to me.</p>
+
+<h3 id="handling-fabbrica">Handling Fabbrica</h3>
+
+<p>Fabbrica automatically generates types and its functions each time we run a database migration. Since these will always change and represent everything as defined in our Prisma schema we should be able to safely say that this folder shouldn’t be considered part of our project.</p>
+
+<p>Let’s start with a slice of knip’s default configuration, in a newly created <code class="language-plaintext highlighter-rouge">knip.json</code> file:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://unpkg.com/knip@5/schema.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"project"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Running <code class="language-plaintext highlighter-rouge">npm run knip</code> before and after adding this file seems to produce the same result, so we can safely say the configuration is working. The full <code class="language-plaintext highlighter-rouge">project</code> array from the default configuration is maintained because knip overrides and does not merge the values listed in the <code class="language-plaintext highlighter-rouge">knip.config</code> with the default.</p>
+
+<p>Now we’ll add our generated Fabbrica directory as negated in our project, run <code class="language-plaintext highlighter-rouge">npm run knip</code> again, and watch these offenses disappear:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://unpkg.com/knip@5/schema.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"project"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"!src/spec/__generated__/fabbrica/**/*"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Since I’m overriding the default configuration I want to be sure that I’m not screwing anything up while I’m experimenting with configuration. <a href="https://chatgpt.com/share/678038ef-9168-8013-948b-02a46fa63b48">I’ll use ChatGPT to keep track of the output</a>. It seems to me like excluding the automatically generated fabbrica directory worked as expected without causing any other changes elsewhere in the analysis. <em>Aw yiss</em>.</p>
+
+<p>Upon further reading, however, I’ve realized that this is likely a better use case for <a href="https://knip.dev/guides/configuring-project-files#ignore-issues-in-specific-files">ignore</a>. From the docs:</p>
+
+<blockquote>
+  <p>Use <code class="language-plaintext highlighter-rouge">ignore</code> if a certain file contain unused exports that we want to ignore.</p>
+</blockquote>
+
+<p>I’ll try this configuration instead:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://unpkg.com/knip@5/schema.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ignore"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"src/spec/__generated__/fabbrica/**/*"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Ugh. I hit my ChatGPT upload limit for the day… I’ll switch over to <code class="language-plaintext highlighter-rouge">npm run knip -- --watch --reporters compact</code> instead for now. I see that it is the same output as before. Nice.</p>
+
+<h3 id="handling-pm2">Handling PM2</h3>
+
+<p>Likely the more straightforward of the two remaining issues is our PM2 configuration. Let’s start by claiming that <code class="language-plaintext highlighter-rouge">pm2.config.js</code> is an entry file:</p>
+
+<p>Going from what I have currently, plus the default entry file configuration:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://unpkg.com/knip@5/schema.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"entry"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"src/{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"ignore"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"src/spec/__generated__/fabbrica/**/*"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>… to the inclusion of <code class="language-plaintext highlighter-rouge">pm2.config.js</code>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://unpkg.com/knip@5/schema.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"entry"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"src/{index,cli,main}.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"pm2.config.js"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"ignore"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"src/spec/__generated__/fabbrica/**/*"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>… still reports <code class="language-plaintext highlighter-rouge">pm2.config.js</code> as an unused file. Damn it. It looks like I’ll need to write some plugins for the remaining issues.</p>
+
+<h2 id="knip-plugins">Knip plugins</h2>
+
+<p>This is the part that I am afraid of. The only way to handle configuration files seems to be by creating plugins. This wouldn’t normally get my dander up but, unfortunately, it seems like there is no way to prove that my plugin is working locally in development. This means that I need to jump through a few hoops to ensure the plugins I’m writing are working properly before potentially submitting them for review back to the base package.</p>
+
+<p>I think a decent approach might be as follows:</p>
+
+<ol>
+  <li>fork knip</li>
+  <li>clone my fork of the repo and get it set up properly</li>
+  <li>use <code class="language-plaintext highlighter-rouge">npm link</code> to get the package running in my project (<a href="https://dev.to/one-beyond/different-approaches-to-testing-your-own-packages-locally-npm-link-4hoj">ref</a>)</li>
+  <li>use <a href="https://knip.dev/guides/writing-a-plugin#create-a-new-plugin">knip’s plugin generator</a> to generate a new plugin</li>
+  <li>write the plugin</li>
+  <li>test it in my project</li>
+  <li>…</li>
+  <li>profit</li>
+</ol>
+
+<p>There’s just one inherent problem with this proposed solution: I’m not sure that my plugins will ever get merged. OOS is great until you have to get involved during a project with a set timeline, self-imposed or otherwise.</p>
+
+<p>But, whatever, I’m here to learn! The only alternative I can think of is using something like <a href="https://www.npmjs.com/package/patch-package">patch-package</a>, but I’ll cross that bridge if and when I come to it.</p>
+
+<h3 id="local-setup">Local setup</h3>
+
+<p>After forking and cloning, I need to make sure I’m running the same version locally as I am from npm. <code class="language-plaintext highlighter-rouge">npm ls knip</code> says <code class="language-plaintext highlighter-rouge">5.42.0</code> so that’s the tag I’ll work from.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout 5.42.0
+git checkout <span class="nt">-b</span> add/pm2-plugin
+</code></pre></div></div>
+
+<p>Next, I have to set up the project… but how? The readme lacks any kind of contribution documentation. They seem use bun, but I’m unsure as to which package manager I should be using. Judging by their <code class="language-plaintext highlighter-rouge">package.json</code> file’s <code class="language-plaintext highlighter-rouge">workspaces</code> entry, I’ll assume npm… but there’s a lot of <a href="https://bun.sh/">bun</a> stuff in here too. It seems like bun is actually a npm-compatible package manager, in addition to a slew of other things and now I’m noticing a <code class="language-plaintext highlighter-rouge">bun.lockb</code> file… Okay… Bun it is!</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-fsSL</span> https://bun.sh/install | bash
+<span class="nb">source</span> ~/.zshrc
+bun <span class="nb">install</span>
+</code></pre></div></div>
+
+<p>Ok. That seemed to have worked.</p>
+
+<p>Judging by their <code class="language-plaintext highlighter-rouge">package.json</code>’s <code class="language-plaintext highlighter-rouge">scripts</code> entry I’m not seeing any build-related commands. I guess I’ll just try linking it.</p>
+
+<p>After doing a bit more research and being saddened by how overly complex <code class="language-plaintext highlighter-rouge">npm link</code> works, I decided to try the following in my project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm uninstall knip
+npm <span class="nb">install</span> <span class="nt">--save-dev</span> ../../../src/knip/packages/knip
+</code></pre></div></div>
+
+<p>Now running <code class="language-plaintext highlighter-rouge">npm run knip</code> in my project gives me an error:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ampwall git:<span class="o">(</span>add/knip<span class="o">)</span> ✗ npm run knip
+
+<span class="o">&gt;</span> ampwall@0.1.0 knip
+<span class="o">&gt;</span> knip
+
+node:internal/modules/esm/resolve:255
+    throw new ERR_MODULE_NOT_FOUND<span class="o">(</span>
+          ^
+
+Error <span class="o">[</span>ERR_MODULE_NOT_FOUND]: Cannot find module <span class="s1">'/home/meowsus/Code/src/knip/packages/knip/dist/cli.js'</span> imported from /home/meowsus/Code/src/knip/packages/knip/bin/knip.js
+    at finalizeResolution <span class="o">(</span>node:internal/modules/esm/resolve:255:11<span class="o">)</span>
+    at moduleResolve <span class="o">(</span>node:internal/modules/esm/resolve:908:10<span class="o">)</span>
+    at defaultResolve <span class="o">(</span>node:internal/modules/esm/resolve:1121:11<span class="o">)</span>
+    at ModuleLoader.defaultResolve <span class="o">(</span>node:internal/modules/esm/loader:396:12<span class="o">)</span>
+    at ModuleLoader.resolve <span class="o">(</span>node:internal/modules/esm/loader:365:25<span class="o">)</span>
+    at ModuleLoader.getModuleJob <span class="o">(</span>node:internal/modules/esm/loader:240:38<span class="o">)</span>
+    at ModuleWrap.&lt;anonymous&gt; <span class="o">(</span>node:internal/modules/esm/module_job:85:39<span class="o">)</span>
+    at <span class="nb">link</span> <span class="o">(</span>node:internal/modules/esm/module_job:84:36<span class="o">)</span> <span class="o">{</span>
+  code: <span class="s1">'ERR_MODULE_NOT_FOUND'</span>,
+  url: <span class="s1">'file:///home/meowsus/Code/src/knip/packages/knip/dist/cli.js'</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>This isn’t all bad, though. At least I know that the relative link is working. I just need to check this workspace package’s <code class="language-plaintext highlighter-rouge">package.json</code> file to find the build command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/Code/src/knip/packages/knip
+bun run build
+</code></pre></div></div>
+
+<p>Bam. Now I have a <code class="language-plaintext highlighter-rouge">dist</code> folder at <code class="language-plaintext highlighter-rouge">~/Code/src/knip/packages/knip/dist</code>.</p>
+
+<p>Running <code class="language-plaintext highlighter-rouge">npm run knip</code> now succeeds. Success!</p>
+
+<h3 id="generating-the-plugin-boilerplate">Generating the plugin boilerplate</h3>
+
+<p>Okay. Now let’s try creating this plugin:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/Code/src/knip/packages/knip<span class="sb">`</span>
+bun create-plugin <span class="nt">--name</span> pm2
+bun run <span class="nb">test</span>/plugins/pm2.test.ts
+</code></pre></div></div>
+
+<p>That worked and a <code class="language-plaintext highlighter-rouge">git status -s</code> call shows:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> M schema.json
+ M src/plugins/index.ts
+ M src/schema/plugins.ts
+ M src/types/PluginNames.ts
+?? fixtures/plugins/pm2/
+?? src/plugins/pm2/
+?? <span class="nb">test</span>/plugins/pm2.test.ts
+</code></pre></div></div>
+
+<p>Digging into the boilerplate generated in <code class="language-plaintext highlighter-rouge">src/plugins/pm2/index.ts</code>, I see:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="kd">type</span> <span class="p">{</span>
+  <span class="nx">IsPluginEnabled</span><span class="p">,</span>
+  <span class="nx">Plugin</span><span class="p">,</span>
+  <span class="nx">ResolveConfig</span><span class="p">,</span>
+<span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../types/config.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">toDeferResolve</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../util/input.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">hasDependency</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../util/plugin.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="kd">type</span> <span class="p">{</span> <span class="nx">PluginConfig</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./types.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// link to pm2 docs</span>
+
+<span class="kd">const</span> <span class="nx">title</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">pm2</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">enablers</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">pm2</span><span class="dl">"</span><span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">isEnabled</span><span class="p">:</span> <span class="nx">IsPluginEnabled</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">dependencies</span> <span class="p">})</span> <span class="o">=&gt;</span>
+  <span class="nf">hasDependency</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">,</span> <span class="nx">enablers</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">config</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kd">const</span> <span class="nx">entry</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kd">const</span> <span class="nx">production</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kd">const</span> <span class="nx">resolveConfig</span><span class="p">:</span> <span class="nx">ResolveConfig</span><span class="o">&lt;</span><span class="nx">PluginConfig</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">async </span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="nx">config</span><span class="p">?.</span><span class="nx">plugins</span> <span class="o">??</span> <span class="p">[];</span>
+  <span class="k">return</span> <span class="p">[...</span><span class="nx">inputs</span><span class="p">].</span><span class="nf">map</span><span class="p">(</span><span class="nx">toDeferResolve</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="nx">title</span><span class="p">,</span>
+  <span class="nx">enablers</span><span class="p">,</span>
+  <span class="nx">isEnabled</span><span class="p">,</span>
+  <span class="nx">config</span><span class="p">,</span>
+  <span class="nx">entry</span><span class="p">,</span>
+  <span class="nx">production</span><span class="p">,</span>
+  <span class="nx">resolveConfig</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">satisfies</span> <span class="nx">Plugin</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>So I’ll need to adjust the <code class="language-plaintext highlighter-rouge">config</code> array. The docs look to recommend <code class="language-plaintext highlighter-rouge">ecosystem.config.js</code> as the pm2 config file name. Great! Ours is named <code class="language-plaintext highlighter-rouge">pm2.config.js</code>. Heck, I’ll add both.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="kd">type</span> <span class="p">{</span>
+  <span class="nx">IsPluginEnabled</span><span class="p">,</span>
+  <span class="nx">Plugin</span><span class="p">,</span>
+  <span class="nx">ResolveConfig</span><span class="p">,</span>
+<span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../types/config.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">toDeferResolve</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../util/input.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">hasDependency</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../util/plugin.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="kd">type</span> <span class="p">{</span> <span class="nx">PluginConfig</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./types.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// https://pm2.keymetrics.io/docs/usage/quick-start/</span>
+
+<span class="kd">const</span> <span class="nx">title</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">pm2</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">enablers</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">pm2</span><span class="dl">"</span><span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">isEnabled</span><span class="p">:</span> <span class="nx">IsPluginEnabled</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">dependencies</span> <span class="p">})</span> <span class="o">=&gt;</span>
+  <span class="nf">hasDependency</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">,</span> <span class="nx">enablers</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">config</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">{ecosystem,pm2}.config.js</span><span class="dl">"</span><span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">entry</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kd">const</span> <span class="nx">production</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kd">const</span> <span class="nx">resolveConfig</span><span class="p">:</span> <span class="nx">ResolveConfig</span><span class="o">&lt;</span><span class="nx">PluginConfig</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">async </span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="nx">config</span><span class="p">?.</span><span class="nx">plugins</span> <span class="o">??</span> <span class="p">[];</span>
+  <span class="k">return</span> <span class="p">[...</span><span class="nx">inputs</span><span class="p">].</span><span class="nf">map</span><span class="p">(</span><span class="nx">toDeferResolve</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="nx">title</span><span class="p">,</span>
+  <span class="nx">enablers</span><span class="p">,</span>
+  <span class="nx">isEnabled</span><span class="p">,</span>
+  <span class="nx">config</span><span class="p">,</span>
+  <span class="nx">entry</span><span class="p">,</span>
+  <span class="nx">production</span><span class="p">,</span>
+  <span class="nx">resolveConfig</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">satisfies</span> <span class="nx">Plugin</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Next we probably have to build again (<code class="language-plaintext highlighter-rouge">bun run build</code>) before testing to see if that configuration is getting picked up in the project. Aaaand it’s not. Great.</p>
+
+<p>Oh, I see why. Our <code class="language-plaintext highlighter-rouge">workers:prod</code> script calls <code class="language-plaintext highlighter-rouge">pm-runtime</code> but that’s not listed as a dependency in the project. That’s not good.</p>
+
+<p>Searching the codebase shows that we just globally install <code class="language-plaintext highlighter-rouge">pm2</code> in our Dockerfile. No versioning or anything. We should be able to assume it’s always grabbing the latest, then:</p>
+
+<div class="language-Dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">RUN </span>npm <span class="nb">install</span> <span class="nt">-g</span> pm2
+</code></pre></div></div>
+
+<h3 id="a-fun-diversion-versioning-pm2">A fun diversion: versioning pm2</h3>
+
+<p>Okay, so globally installing pm2 is unideal. Let’s get it into our package. I’ll start by deleting the aforementioned line out of the Dockerfile and running:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install </span>pm2@latest pm2-runtime@latest
+</code></pre></div></div>
+
+<p>Now when we run <code class="language-plaintext highlighter-rouge">npm run knip</code> in our project, does <code class="language-plaintext highlighter-rouge">pm2.config.js</code> not show up in unused files? No. No it does not. Thank god.</p>
+
+<p>One thing I just noticed is that <code class="language-plaintext highlighter-rouge">npm</code> seems to cache the relative link. Deleting <code class="language-plaintext highlighter-rouge">node_modules/</code> out of the project didn’t even fix it. I think the easiest course here, after <code class="language-plaintext highlighter-rouge">npm install ../path/to/local/repo</code> is to <code class="language-plaintext highlighter-rouge">npm uninstall &lt;package&gt;</code> after use and reinstall the base package with <code class="language-plaintext highlighter-rouge">npm install &lt;package&gt;</code> manually.</p>
+
+<h3 id="back-to-the-pm2-plugin">Back to the pm2 plugin</h3>
+
+<p>Okay, now that I know that it’s working I’m pretty sure I can scale back the <code class="language-plaintext highlighter-rouge">config</code> bit of the pm2 plugin to just:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">config</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">ecosystem.config.js</span><span class="dl">"</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p>… and override this in my project with:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://unpkg.com/knip@5/schema.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ignore"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"src/spec/__generated__/fabbrica/**/*"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"pm2"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"config"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"pm2.config.js"</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>… which works. This is good. My final knip plugin looks like this:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="kd">type</span> <span class="p">{</span>
+  <span class="nx">IsPluginEnabled</span><span class="p">,</span>
+  <span class="nx">Plugin</span><span class="p">,</span>
+  <span class="nx">ResolveConfig</span><span class="p">,</span>
+<span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../types/config.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">toDeferResolve</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../util/input.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">hasDependency</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../util/plugin.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="kd">type</span> <span class="p">{</span> <span class="nx">PluginConfig</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./types.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// https://pm2.keymetrics.io/docs/usage/quick-start/</span>
+
+<span class="kd">const</span> <span class="nx">title</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">pm2</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">enablers</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">pm2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">pm2-runtime</span><span class="dl">"</span><span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">isEnabled</span><span class="p">:</span> <span class="nx">IsPluginEnabled</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">dependencies</span> <span class="p">})</span> <span class="o">=&gt;</span>
+  <span class="nf">hasDependency</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">,</span> <span class="nx">enablers</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">config</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">ecosystem.config.js</span><span class="dl">"</span><span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">entry</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kd">const</span> <span class="nx">production</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kd">const</span> <span class="nx">resolveConfig</span><span class="p">:</span> <span class="nx">ResolveConfig</span><span class="o">&lt;</span><span class="nx">PluginConfig</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">async </span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="nx">config</span><span class="p">?.</span><span class="nx">plugins</span> <span class="o">??</span> <span class="p">[];</span>
+  <span class="k">return</span> <span class="p">[...</span><span class="nx">inputs</span><span class="p">].</span><span class="nf">map</span><span class="p">(</span><span class="nx">toDeferResolve</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
+  <span class="nx">title</span><span class="p">,</span>
+  <span class="nx">enablers</span><span class="p">,</span>
+  <span class="nx">isEnabled</span><span class="p">,</span>
+  <span class="nx">config</span><span class="p">,</span>
+  <span class="nx">entry</span><span class="p">,</span>
+  <span class="nx">production</span><span class="p">,</span>
+  <span class="nx">resolveConfig</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">satisfies</span> <span class="nx">Plugin</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="and-im-calling-it">And I’m calling it</h2>
+
+<p>My spike day is over. I’ve learned how to work with Knip plugins, which is a great start, but I’m feeling like it’s overkill. I’m pretty sure that we can just define our config files as entry files in our knip config and be done.</p>
+
+<p>I’d love to help contribute to this community, because it is a really snazzy project, however I can’t shake the feeling that the likelihood of my code being accepted is low due to the intimate knowledge one needs to have with the underlying packages you’re writing plugins for. I do not have a great internal knowledge of either pm2 or Panda, so this feels like it’s going to lead to a rabbit-hole that I’d rather not involve myself in right now.</p>
+
+<p>My final <code class="language-plaintext highlighter-rouge">knip.json</code> looks like this:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://unpkg.com/knip@5/schema.json"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ignore"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"src/spec/__generated__/fabbrica/**/*"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"entry"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"pm2.config.js"</span><span class="p">,</span><span class="w"> </span><span class="s2">"panda.config.ts"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I’m sure I’m introducing blind spots, but as I work through these offenses tomorrow I’ll re-evaluate if one or both will require a plugin.</p>
+
+  </section>
+  <footer></footer>
+</article>
+</main>
+    </main>
+  </body>
+</html>
