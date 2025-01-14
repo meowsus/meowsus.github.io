@@ -16,17 +16,20 @@
       rel="stylesheet"
     >
   </head>
-  <body class="bg-slate-200">
-    <main class="container p-4">
+  <body class="bg-slate-200 p-8">
+    <div class="container max-w-4xl mx-auto">
       <header class="mb-8">
-        <h1 class="text-4xl font-bold text-slate-900">
+        <h1 class="text-4xl font-bold text-slate-900 mb-8">
           <a class="text-blue-700 underline visited:text-blue-600 hover:text-blue-500" href="{{ '/' | relative_url }}">
             {{- site.title -}}
           </a>
         </h1>
+        <p class="text-lg text-slate-600">
+          {{- site.description -}}
+        </p>
       </header>
 
       <main class="{{ page.content_class_names }}">{{ content }}</main>
-    </main>
+    </div>
   </body>
 </html>
