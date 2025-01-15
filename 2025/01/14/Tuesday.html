@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>
+      Tuesday
+      -
+      /dev/blog
+    </title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body class="bg-slate-200 p-8">
+    <div class="container max-w-4xl mx-auto">
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold text-slate-900 mb-8">
+          <a class="text-blue-700 underline visited:text-blue-600 hover:text-blue-500" href="/">/dev/blog</a>
+        </h1>
+      </header>
+
+      <main class=""><article>
+  <header class="mb-8">
+    <h1 class="text-2xl">Tuesday</h1>
+    <p>
+      <time datetime="2025-01-14T00:00:00+00:00">January 14, 2025</time>
+    </p>
+  </header>
+  <section class="prose prose-lg max-w-4xl">
+    <p>After a rocky morning with my newly christened tweenager, full of fights surrounding their ability to choose and apply clothing to their own damn bodies their own damn selves, I was finally out the door and off to their school only about 20 minutes after the bell rang. Every day is a gift.</p>
+
+<p>When I arrived home I had mere moments before my 9AM interview to refresh myself on which recruiter from what company was about to call me about whichever role I applied for at some previous time. I don’t mean this to sound like I was ambivalent. Far from it, in fact; I was quite excited about this one when I remembered which it was. See, I have been adrift in a black sea of unemployment for nearly 180 days. A condition of my unemployment is to look for a job. Any job. Often that is what I do. Some jobs are perfect and with companies I’ve heard of. Some jobs are below or above me and with companies I’ve never heard of before. This was in the latter bracket.</p>
+
+<p>I alerted my team that I’d be late to getting started today. I’ve been helping out at <a href="https://ampwall.com">Ampwall</a> pro-bono to give myself a distraction from the near soul-pulverizing depression of unemployment. IYKYK. I didn’t “K” until now, since this is my first foray into being unexpectedly jobless and hopeless. Some would say that I’ve been lucky, to have not have experienced this once during my 22 year career.</p>
+
+<p>But this backstory isn’t entirely necessary. This blog is supposed to be about what I worked on today.</p>
+
+<p>I’m frontperson this week at Ampwall, which is what we call our support engineer role. Once every five weeks or so I get to turn my brain off and crush support requests. At least that’s what I tell myself I’m going to do. Recently, I’ve had to scale my commitment to my team back from eight to four hours per day due to childcare reasons. It’s not a lot of time to get much of anything done, but I try.</p>
+
+<p>Today I merged a logging change for <a href="https://uppy.io/">Uppy</a>, our file uploading library which we use uniformly for all of our uploads. Yesterday, I noticed that two of our customers complaining about file uploads. I asked the team about it and everyone said that Uppy was a relative black box. I changed that.</p>
+
+<p>We use <a href="https://github.com/pinojs/pino">Pino</a> for logging to our EKS cluster. I noticed that Uppy has <a href="https://uppy.io/docs/uppy/#logger">logger configuration</a> that thankfully matched the pattern of our existing logger utility that interfaces with Pino. So I created a simple little utility:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">isProduction</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/lib/environment</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">logger</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/lib/logger</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">uppyLogger</span> <span class="o">=</span> <span class="nx">isProduction</span>
+  <span class="p">?</span> <span class="p">{</span>
+      <span class="c1">// eslint-disable-next-line @typescript-eslint/no-explicit-any</span>
+      <span class="na">error</span><span class="p">:</span> <span class="p">(...</span><span class="na">args</span><span class="p">:</span> <span class="kr">any</span><span class="p">[])</span> <span class="o">=&gt;</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">error</span><span class="p">(...(</span><span class="nx">args</span> <span class="k">as</span> <span class="p">[</span><span class="kr">string</span><span class="p">,</span> <span class="nx">object</span><span class="p">])),</span>
+      <span class="na">debug</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{},</span>
+      <span class="na">warn</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{},</span>
+    <span class="p">}</span>
+  <span class="p">:</span> <span class="nx">logger</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">uppyLogger</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Now, in production we only track errors but in development we see all of the library’s warnings. And, yes, I BS’d my way though those types. Sue me.</p>
+
+<p>I closed those two tickets, since they were not replicable by any member of our team, and assured the users that now we have visibility into their plight. I even got an “o7” in response when I said they’re free to reopen the ticket if they encounter the bug again, which made me feel my age acutely.</p>
+
+<p>I then went onto triage an iOS-specific issue around <code class="language-plaintext highlighter-rouge">datetime-local</code> text fields. Apparently, on a user’s iPad, they were experiencing an issue where scheduling or re-scheduling an album’s release date wasn’t working. It was working as expected on their iPhone.</p>
+
+<p>To try to judo-chop a solution I came up with this:</p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">PICKER_TYPES</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="dl">"</span><span class="s2">date</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">datetime-local</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">month</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">week</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">time</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">color</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">file</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">];</span>
+
+<span class="cm">/* snip */</span>
+
+<span class="kd">const</span> <span class="nx">TextField</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">forwardRef</span><span class="o">&lt;</span>
+  <span class="nx">HTMLInputElement</span><span class="p">,</span>
+  <span class="nx">React</span><span class="p">.</span><span class="nx">ComponentProps</span><span class="o">&lt;</span><span class="k">typeof</span> <span class="nx">StyledTextField</span><span class="o">&gt;</span>
+<span class="o">&gt;</span><span class="p">(({</span> <span class="kd">type</span> <span class="o">=</span> <span class="dl">""</span><span class="p">,</span> <span class="p">...</span><span class="nx">rest</span> <span class="p">},</span> <span class="nx">ref</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">containerRef</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">useRef</span><span class="o">&lt;</span><span class="nx">HTMLDivElement</span><span class="o">&gt;</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+  <span class="nx">React</span><span class="p">.</span><span class="nf">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">PICKER_TYPES</span><span class="p">.</span><span class="nf">includes</span><span class="p">(</span><span class="kd">type</span><span class="p">))</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">inputElement</span> <span class="o">=</span>
+        <span class="nx">containerRef</span><span class="p">.</span><span class="nx">current</span><span class="p">?.</span><span class="nx">querySelector</span><span class="o">&lt;</span><span class="nx">HTMLInputElement</span><span class="o">&gt;</span><span class="p">(</span>
+          <span class="s2">`input[type="</span><span class="p">${</span><span class="kd">type</span><span class="p">}</span><span class="s2">"]`</span><span class="p">,</span>
+        <span class="p">);</span>
+
+      <span class="kd">const</span> <span class="nx">handleFocus</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">inputElement</span><span class="p">?.</span><span class="nf">showPicker</span><span class="p">();</span>
+      <span class="p">};</span>
+
+      <span class="nx">inputElement</span><span class="p">?.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">focus</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleFocus</span><span class="p">);</span>
+
+      <span class="k">return </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">inputElement</span><span class="p">?.</span><span class="nf">removeEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">focus</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleFocus</span><span class="p">);</span>
+      <span class="p">};</span>
+    <span class="p">}</span>
+  <span class="p">},</span> <span class="p">[</span><span class="kd">type</span><span class="p">]);</span>
+
+  <span class="k">return </span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">ref</span><span class="p">=</span><span class="si">{</span><span class="nx">containerRef</span><span class="si">}</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nc">StyledTextField</span> <span class="si">{</span><span class="p">...</span><span class="nx">rest</span><span class="si">}</span> <span class="na">type</span><span class="p">=</span><span class="si">{</span><span class="kd">type</span><span class="si">}</span> <span class="na">ref</span><span class="p">=</span><span class="si">{</span><span class="nx">ref</span><span class="si">}</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>The idea here is to show the native “picker” UI when the field comes into focus. I approached from this angle because the user reported that they couldn’t see the calendar icon (and trigger for the native UI) was not visible on their iPad for this field. I said, “hey, what if they didn’t need to click that silly icon at all?” which is a biased gripe of mine with <code class="language-plaintext highlighter-rouge">[type=^date*]</code> inputs that I carry with me.</p>
+
+<p>Also, the reason why this looks <em>so much crazier</em> than it should is because I was getting an error when using the <code class="language-plaintext highlighter-rouge">onFocus</code> prop:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Uncaught NotAllowedError: Failed to execute 'showPicker' on 'HTMLInputElement': HTMLInputElement::showPicker() requires a user gesture.
+</code></pre></div></div>
+
+<p>This browser error makes sense when you think about it: these UIs shouldn’t appear out of nowhere without the user requesting them. So it was time for an eventHandler solution which is why the <code class="language-plaintext highlighter-rouge">useEffect</code> is present.</p>
+
+<p>Also <code class="language-plaintext highlighter-rouge">StyledTextField</code> is a <a href="https://panda-css.com/">Panda CSS</a> styling a <a href="https://react-spectrum.adobe.com/react-aria/TextField.html">React Aria Component</a> so it resolves to a <code class="language-plaintext highlighter-rouge">div</code>, not an <code class="language-plaintext highlighter-rouge">input</code>, with a confusing path to getting the ref down to the input itself; hence the <code class="language-plaintext highlighter-rouge">querySelector</code>.</p>
+
+<p>This works as intended: the user focuses the input and the picker UI appears yet, still, iOS is wildly screwed up. It seems to be launching the picker well outside the viewport (to the top-left) but that’s just an assumption based on a video another team member took for me.</p>
+
+<p>Yes, I’m unapologetically a Linux user. No, there’s no way for me to reproduce this bug locally. I’m great at parties.</p>
+
+<p>Anyway, that’s where I left off, trying to triage a wonky UI bug that affects but two of our four <code class="language-plaintext highlighter-rouge">datetime-local</code> inputs inexplicably.</p>
+
+<p>More tomorrow!</p>
+
+  </section>
+  <footer></footer>
+</article>
+</main>
+    </div>
+  </body>
+</html>
