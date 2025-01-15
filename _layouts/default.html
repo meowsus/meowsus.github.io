@@ -15,6 +15,12 @@
       href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap"
       rel="stylesheet"
     >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <script>
+      hljs.highlightAll();
+    </script>
   </head>
   <body class="bg-slate-200 p-8">
     <div class="container max-w-4xl mx-auto">
@@ -24,9 +30,6 @@
             {{- site.title -}}
           </a>
         </h1>
-        <p class="text-lg text-slate-600">
-          {{- site.description -}}
-        </p>
       </header>
 
       <main class="{{ page.content_class_names }}">{{ content }}</main>

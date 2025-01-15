@@ -1,15 +1,17 @@
 ---
 layout: default
+title: Home
 ---
 
-<ul class="list-disc ml-4">
+<p class="text-lg text-slate-600 mb-8">{{- site.description -}}</p>
+
+<ul>
   {% for post in site.posts %}
   <li>
     <a class="link" href="{{ post.url }}"
       >{{ post.date | date: "%B %-d, %Y" }}</a
     >
-    -
-    <strong>{{post.title}}</strong> {{ post.excerpt | strip_html }}
+    - {{ post.excerpt | strip_html }}
   </li>
   {% endfor %}
 </ul>
