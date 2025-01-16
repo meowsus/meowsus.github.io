@@ -22,15 +22,15 @@
       hljs.highlightAll();
     </script>
   </head>
-  <body class="bg-slate-200 p-8">
-    <div class="container max-w-4xl mx-auto">
-      <header class="mb-8">
-        <h1 class="text-4xl font-bold text-slate-900 mb-8">
+  <body class="bg-slate-200">
+    <div class="container max-w-4xl mx-auto min-h-screen p-8 flex flex-col gap-8">
+      <header>
+        <h1 class="text-4xl font-bold">
           <a class="text-blue-700 underline visited:text-blue-600 hover:text-blue-500" href="/">/dev/blog</a>
         </h1>
       </header>
 
-      <main class=""><div class="prose-lg">
+      <main class="flex-grow "><div class="prose-lg">
   <p class="text-slate-600 mb-8">My intent with this blog is to catalog my daily work. I will try to dedicate the final 30 minutes of my day to this writing. I do this both for reflection and to free myself from any and all brainworms which may have attached themselves to me throughout the day.
 </p>
 
@@ -55,6 +55,16 @@
   </ul>
 </div>
 </main>
+
+      <!-- show footer if unemployed: true -->
+      
+        <footer class="border-t border-slate-300 pt-8">
+          <p class="text-slate-600 prose min-w-full text-center">
+            Oh, hey! Did I mention that I'm looking for work? If you're interested feel free to snoop my
+            <a href="https://www.linkedin.com/in/hurt-coward/" target="_blank">LinkedIn profile</a>.
+          </p>
+        </footer>
+      
     </div>
   </body>
 </html>
