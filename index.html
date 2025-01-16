@@ -3,15 +3,17 @@ layout: default
 title: Home
 ---
 
-<p class="text-lg text-slate-600 mb-8">{{- site.description -}}</p>
+<div class="prose-lg">
+  <p class="text-slate-600 mb-8">{{- site.description -}}</p>
 
-<ul>
-  {% for post in site.posts %}
-  <li>
-    <a class="link" href="{{ post.url }}"
-      >{{ post.date | date: "%B %-d, %Y" }}</a
-    >
-    - {{ post.excerpt | strip_html }}
-  </li>
-  {% endfor %}
-</ul>
+  <ul class="list-none pl-0">
+    {% for post in site.posts %}
+    <li class="my-4 p-0 text-slate-600">
+      <a class="link" href="{{ post.url }}"
+        >{{ post.date | date: "%B %-d, %Y" }}</a
+      >
+      &nbsp;{{ post.excerpt | strip_html }}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
