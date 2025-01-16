@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      gutenberg-css:
-        specifier: ^0.7.0
-        version: 0.7.0
     devDependencies:
       '@shopify/prettier-plugin-liquid':
         specifier: ^1.5.0
@@ -314,10 +310,6 @@ packages:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
     hasBin: true
 
-  gutenberg-css@0.7.0:
-    resolution: {integrity: sha512-M8o1BVkO8h1YOl1nVv7/ZVYZt8zed4Y3nzmvJbEPu15u/sGllcjITBowTESqd51bXUl3qVbeSnNqSdmjVl5/1g==}
-    engines: {node: '>=8.0'}
-
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
@@ -434,9 +426,6 @@ packages:
   normalize-range@0.1.2:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
-
-  normalize.css@8.0.1:
-    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
@@ -1134,10 +1123,6 @@ snapshots:
       package-json-from-dist: 1.0.1
       path-scurry: 1.11.1
 
-  gutenberg-css@0.7.0:
-    dependencies:
-      normalize.css: 8.0.1
-
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
@@ -1229,8 +1214,6 @@ snapshots:
   normalize-path@3.0.0: {}
 
   normalize-range@0.1.2: {}
-
-  normalize.css@8.0.1: {}
 
   nth-check@2.1.1:
     dependencies:
