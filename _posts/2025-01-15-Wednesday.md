@@ -17,7 +17,7 @@ Days with an interview mean that even my four-hour commitment is hard to maintai
 
 Before the new year, Ampwall provided me with something to do to keep my skills sharp, make me feel less alone, and give me something to do besides screaming into the void. Now that it's 2025, however, I need to find a paying job. I'm sure you've heard that "finding a job is a full-time job." I don't even have the time to work a part-time job right now, so I need to focus all my available time, now that companies seem interested in hiring again, on finding a full-time job. And this makes me sad because I do so love my team and this product. "It's the exact thing I should be doing," I once told my therapist. Anyway, we'll see how this plays out. I'm definitely not leaving the team, but I think I will have to fade into the background a bit more so that I can focus on myself and my needs for a while.
 
-Having said all that, I did manage to log an hour or two at the `datetime-local` bug mentioned in [the previous post]({{ post_url 2025-01-14-Tuesday }}). Despite not fixing a damn thing, I did find out a few things:
+Having said all that, I did manage to log an hour or two at the `datetime-local` bug mentioned in [the previous post]({% post_url 2025-01-14-Tuesday %}). Despite not fixing a damn thing, I did find out a few things:
 
 1. Testing locally from an external, physical device (my daughter's iPad, in this case) won't be possible without significant code change.
 2. My daughter has installed a third-party keyboard on her iPad which _meows_ as you use it and is a usability nightmare (not just because of the meows).
