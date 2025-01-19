@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>/dev/blog</title>
+    <link>https://meowsus.github.io</link>
+    <atom:link href="https://meowsus.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <description>My intent with this blog is to catalog my daily work. I will try to dedicate the final 30 minutes of my day to this writing. I do this both for reflection and to free myself from any and all brainworms which may have attached themselves to me throughout the day.
+</description>
+    <lastBuildDate>Sun, 19 Jan 2025 23:55:48 +0000</lastBuildDate>
+    
+    
+    <item>
+      <title>Sunday</title>
+      <link>
+        https://meowsus.github.io/2025/01/19/Sunday.html
+      </link>
+      <description>
+        &lt;p&gt;Yes, it’s the weekend. No, I’m not really working.&lt;/p&gt;
+
+&lt;p&gt;I was reading &lt;a href=&quot;https://news.ycombinator.com&quot;&gt;Hacker News&lt;/a&gt; on Friday night and saw &lt;a href=&quot;https://reedybear.bearblog.dev/ive-been-advocating-for-rss-support-and-you-should-too/&quot;&gt;this post&lt;/a&gt; advocating for more RSS feeds across the web. I’ve been an exclusive ...
+      </description>
+      <pubDate>Sun, 19 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/01/19/Sunday.html
+      </guid>
+    </item>
+    
+    <item>
+      <title>Friday</title>
+      <link>
+        https://meowsus.github.io/2025/01/17/Friday.html
+      </link>
+      <description>
+        &lt;p&gt;Welcome to this week’s installment of &lt;em&gt;Find-A-Job-Friday&lt;/em&gt;! Each Friday I spend an average of two hours sending resumes and cover letters out to an average of 5 companies, all while telling that little voice in the back of my brain that tries to convince me that it’s just an act of futility to &lt;em&gt;stfu&lt;/em&gt;, to use the parlance of digital times past.&lt;/p...
+      </description>
+      <pubDate>Fri, 17 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/01/17/Friday.html
+      </guid>
+    </item>
+    
+    <item>
+      <title>Thursday</title>
+      <link>
+        https://meowsus.github.io/2025/01/16/Thursday.html
+      </link>
+      <description>
+        &lt;p&gt;I took the day off to clean today since I have some friends from Philadelphia staying with me over the weekend. I observed that my normal &lt;em&gt;omg I have to speed up my self-care routine&lt;/em&gt; feelings went totally out the window, and I was able to enjoy my journaling and exercise. I wrote a lot, actually.&lt;/p&gt;
+
+&lt;p&gt;My morning journaling routine was really the impet...
+      </description>
+      <pubDate>Thu, 16 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/01/16/Thursday.html
+      </guid>
+    </item>
+    
+    <item>
+      <title>Wednesday</title>
+      <link>
+        https://meowsus.github.io/2025/01/15/Wednesday.html
+      </link>
+      <description>
+        &lt;p&gt;I got a late start today despite getting the kids to school on time. On a good drop-off day, I get back to my house around 8:30 in the morning, which leaves me a scant 30 minutes to journal, stretch, and meditate.&lt;/p&gt;
+
+&lt;p&gt;Today, while journaling, I made an interesting observation: working for Ampwall is a distraction. When I was brought into the fold, it was at a time when ...
+      </description>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/01/15/Wednesday.html
+      </guid>
+    </item>
+    
+    <item>
+      <title>Tuesday</title>
+      <link>
+        https://meowsus.github.io/2025/01/14/Tuesday.html
+      </link>
+      <description>
+        &lt;p&gt;After a rocky morning with my newly christened tweenager, full of fights surrounding their ability to choose and apply clothing to their own damn bodies their own damn selves, I was finally out the door and off to their school only about 20 minutes after the bell rang. Every day is a gift.&lt;/p&gt;
+
+&lt;p&gt;When I arrived home I had mere moments before my 9AM interview to refresh mys...
+      </description>
+      <pubDate>Tue, 14 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/01/14/Tuesday.html
+      </guid>
+    </item>
+    
+  </channel>
+</rss>
