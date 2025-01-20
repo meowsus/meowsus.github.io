@@ -10,7 +10,7 @@ title: Home
     {% for post in site.posts %}
     <li class="my-4 p-0 text-slate-600">
       <a class="link" href="{{ post.url }}"
-        >{{ post.date | date: "%B %-d, %Y" }}</a
+        >{{ post.date | date: "%B %-d, %Y" }} - {{ post.title }}</a
       >
       &nbsp;{{ post.excerpt | strip_html }}
     </li>
