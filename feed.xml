@@ -6,7 +6,7 @@
     <atom:link href="https://meowsus.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>My intent with this blog is to catalog my daily work. I will try to dedicate the final 30 minutes of my day to this writing. I do this both for reflection and to free myself from any and all brainworms which may have attached themselves to me throughout the day.
 </description>
-    <lastBuildDate>Mon, 20 Jan 2025 03:32:01 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jan 2025 03:36:21 +0000</lastBuildDate>
     
     
     <item>
@@ -15,9 +15,9 @@
         https://meowsus.github.io/2025/01/19/Sunday.html
       </link>
       <description>
-        &lt;p&gt;Yes, it’s the weekend. No, I’m not really working.&lt;/p&gt;
+        &lt;p&gt;Long have I fantasized about having AI make my dinner for me. I came close tonight by asking ChatGPT to make a pasta sauce from the ingredients I had laying around the fridge.&lt;/p&gt;
 
-&lt;p&gt;I was reading &lt;a href=&quot;https://news.ycombinator.com&quot;&gt;Hacker News&lt;/a&gt; on Friday night and saw &lt;a href=&quot;https://reedybear.bearblog.dev/ive-been-advocating-for-rss-support-and-you-should-too/&quot;&gt;this post&lt;/a&gt; advocating for more RSS feeds across the web. I’ve been an exclusive ...
+&lt;p&gt;To be honest, this isn’t the first time I’ve queried Skynet for the answers to my dinner woes. In fact, when I worked at &lt;a href=&quot;https://www.convictional.com/&quot;&gt;Convictional&lt...
       </description>
       <pubDate>Sun, 19 Jan 2025 00:00:00 +0000</pubDate>
       <guid>
@@ -26,18 +26,18 @@
     </item>
     
     <item>
-      <title>Sunday (AItalian Dinner Edition)</title>
+      <title>Saturday</title>
       <link>
-        https://meowsus.github.io/2025/01/19/Sunday-AItalian-Dinner-Edition.html
+        https://meowsus.github.io/2025/01/18/Saturday.html
       </link>
       <description>
-        &lt;p&gt;Long have I fantasized about having AI make my dinner for me. I came close tonight by asking ChatGPT to make a pasta sauce from the ingredients I had laying around the fridge.&lt;/p&gt;
+        &lt;p&gt;Yes, it’s the weekend. No, I’m not really working.&lt;/p&gt;
 
-&lt;p&gt;To be honest, this isn’t the first time I’ve queried Skynet for the answers to my dinner woes. In fact, when I worked at &lt;a href=&quot;https://www.convictional.com/&quot;&gt;Convictional&lt...
+&lt;p&gt;I was reading &lt;a href=&quot;https://news.ycombinator.com&quot;&gt;Hacker News&lt;/a&gt; last night and saw &lt;a href=&quot;https://reedybear.bearblog.dev/ive-been-advocating-for-rss-support-and-you-should-too/&quot;&gt;this post&lt;/a&gt; advocating for more RSS feeds across the web. I’ve been an exclusive user ...
       </description>
-      <pubDate>Sun, 19 Jan 2025 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 18 Jan 2025 00:00:00 +0000</pubDate>
       <guid>
-        https://meowsus.github.io/2025/01/19/Sunday-AItalian-Dinner-Edition.html
+        https://meowsus.github.io/2025/01/18/Saturday.html
       </guid>
     </item>
     
