@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>
+      Tuesday Morning
+      -
+      /dev/blog
+    </title>
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://meowsus.github.io/feed.xml">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script src="/assets/js/main.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body class="bg-slate-200">
+    <div class="container max-w-4xl mx-auto min-h-screen p-8 flex flex-col gap-8">
+      <header>
+        <h1 class="text-4xl font-bold">
+          <a class="text-blue-700 underline visited:text-blue-600 hover:text-blue-500" href="/">/dev/blog</a>
+        </h1>
+      </header>
+
+      <main class="flex-grow "><article>
+  <header class="mb-8">
+    <h1 class="text-2xl">Tuesday Morning</h1>
+    <p>
+      <time datetime="2025-01-21T00:00:00+00:00">January 21, 2025</time>
+    </p>
+  </header>
+  <section id="post-content" class="prose prose-lg max-w-4xl">
+    <p>In lieu of journaling this morning, I wanted to write this post because my brain was all fired up after a series of information streams from yesterday connected in an interesting way for me this morning while I was staring at my dishes.</p>
+
+<p>Yesterday would have been <a href="https://en.wikipedia.org/wiki/David_Lynch">David Lynch</a>’s 79th birthday. <a href="https://www.designboom.com/art/worldwide-group-meditation-david-lynch-passing-01-20-2025/">I meditated at noon with his family</a> because I thought that sounded like a wonderful way to honor a man whose work and attitude had such a massive impact on my life. Immediately afterward, I watched <a href="https://www.youtube.com/shorts/UljZmbgK_sI">this video</a> on suffering where he said:</p>
+
+<blockquote>
+  <p>Suffering reduces. Negativity is the enemy of creativity. It’s common sense. If someone is depressed, they don’t even feel like getting out of bed, let alone working.</p>
+</blockquote>
+
+<p>That spoke to me. I’ve spent the majority of the last six months majorly depressed. Depression and negativity seem to be a cycle for me. When I’m depressed, I view the world negatively. During long periods of depression, negativity can overshadow my worldview. It becomes the “lens” through which I view the world. Therefore, when I do feel a small amount of relief from depression and try to see the world in a different light, my reality still seems to be diffused by this blanket of negativity, so I sink back into depression. It’s not an active choice, just something that happens automatically.</p>
+
+<p>But after the video, I realized just how negative my worldview had become, and I actively tried to stay positive for the rest of the day. This worked fairly well. I was able to do some chores that I had been putting off over the long weekend.</p>
+
+<p>I typically listen to podcasts when I do chores around the house. Yesterday, I decided to finish listening to the <a href="https://whatmagicisthis.com/2024/11/17/the-influences-influence-of-robert-anton-wilson-with-richard-metzger/">What Magic Is This? episode featuring Richard Metzger</a> where he and Douglas Batchelor discuss <a href="https://en.wikipedia.org/wiki/Robert_Anton_Wilson">Robert Anton Wilson</a>. During the episode, they discussed <a href="https://www.abebooks.com/9780517527573/Programming-Metaprogramming-Human-Biocomputer-Theory-051752757X/plp">Programming &amp; Metaprogramming in the Human Biocomputer</a> by <a href="https://en.wikipedia.org/wiki/John_C._Lilly">John C. Lilly</a>, a book Wilson has mentioned so many times that it is now part of my library. Metzger said the words “running the script,” which Wilson and Lilly have said countless times, but it was only at that moment that my brain said, “wait, they’re talking about what I do every day for work…”</p>
+
+<p>Neither Wilson nor Lilly were software engineers, and they were using terminology from 40+ years ago when writing about this stuff. Oddly, each time I read the words “running a script,” my brain thought about two actors rehearsing lines, despite understanding that the mental model they were describing was based in computing.</p>
+
+<p>Then I thought about how that David Lynch video that I watched <em>loaded a script into memory</em> immediately after meditating when people are arguably more susceptible to such things. Let’s say that there was a bug in my automatic routine which was causing an infinite loop. To fix the bug, I added a new conditional, e.g.:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nf">isNegative</span><span class="p">(</span><span class="nx">Me</span><span class="p">.</span><span class="nx">currentMood</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">Me</span><span class="p">.</span><span class="nf">forcePositivity</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This has had my brain in overdrive this A.M. How much of my life can I start to define as scripts and routines?</p>
+
+<p>Here’s another one I noticed this morning:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">Human</span><span class="p">.</span><span class="nx">isTryingToWork</span> <span class="o">&amp;&amp;</span> <span class="nx">Cat</span><span class="p">.</span><span class="nf">isInLocation</span><span class="p">(</span><span class="nx">Location</span><span class="p">.</span><span class="nx">Lap</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">Human</span><span class="p">.</span><span class="nf">petCat</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I’m interested in seeing how far I can run with this without going completely insane, but for now, I have other things to do, e.g.:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">Time</span><span class="p">.</span><span class="nf">isAfter</span><span class="p">(</span><span class="dl">'</span><span class="s1">8:30AM</span><span class="dl">'</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Human</span><span class="p">.</span><span class="nx">isWorking</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Human</span><span class="p">.</span><span class="nf">experienceGuilt</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">Time</span><span class="p">.</span><span class="nf">isBefore</span><span class="p">(</span><span class="dl">'</span><span class="s1">9:30AM</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">Human</span><span class="p">.</span><span class="nf">journal</span><span class="p">();</span>
+    <span class="nx">Human</span><span class="p">.</span><span class="nf">exercise</span><span class="p">();</span>
+    <span class="nx">Human</span><span class="p">.</span><span class="nf">meditate</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">Human</span><span class="p">.</span><span class="nf">work</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>It’s already 10:11 AM and, though I feel guilty, I am still going to exercise at least.</p>
+
+  </section>
+</article>
+</main>
+
+      
+        <footer class="border-t border-slate-300 pt-8">
+          <p class="text-slate-600 prose min-w-full" id="hit-me-up">
+            Ack! I'm unemployed! If you're interested in hiring me, you could reach me at
+            <code>kurt.russell@proton.me</code> if you were to realize that my first name is actually spelled with a "C"
+            and my last name isn't Russell. It's Howard. Thanks!
+          </p>
+        </footer>
+      
+    </div>
+  </body>
+</html>
