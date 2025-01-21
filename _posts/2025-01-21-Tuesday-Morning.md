@@ -1,0 +1,58 @@
+---
+layout: post
+title: Tuesday Morning
+---
+
+In lieu of journaling this morning, I wanted to write this post because my brain was all fired up after a series of information streams from yesterday connected in an interesting way for me this morning while I was staring at my dishes.
+
+Yesterday would have been [David Lynch](https://en.wikipedia.org/wiki/David_Lynch)'s 79th birthday. [I meditated at noon with his family](https://www.designboom.com/art/worldwide-group-meditation-david-lynch-passing-01-20-2025/) because I thought that sounded like a wonderful way to honor a man whose work and attitude had such a massive impact on my life. Immediately afterward, I watched [this video](https://www.youtube.com/shorts/UljZmbgK_sI) on suffering where he said:
+
+> Suffering reduces. Negativity is the enemy of creativity. It's common sense. If someone is depressed, they don't even feel like getting out of bed, let alone working.
+
+That spoke to me. I've spent the majority of the last six months majorly depressed. Depression and negativity seem to be a cycle for me. When I'm depressed, I view the world negatively. During long periods of depression, negativity can overshadow my worldview. It becomes the "lens" through which I view the world. Therefore, when I do feel a small amount of relief from depression and try to see the world in a different light, my reality still seems to be diffused by this blanket of negativity, so I sink back into depression. It's not an active choice, just something that happens automatically.
+
+But after the video, I realized just how negative my worldview had become, and I actively tried to stay positive for the rest of the day. This worked fairly well. I was able to do some chores that I had been putting off over the long weekend.
+
+I typically listen to podcasts when I do chores around the house. Yesterday, I decided to finish listening to the [What Magic Is This? episode featuring Richard Metzger](https://whatmagicisthis.com/2024/11/17/the-influences-influence-of-robert-anton-wilson-with-richard-metzger/) where he and Douglas Batchelor discuss [Robert Anton Wilson](https://en.wikipedia.org/wiki/Robert_Anton_Wilson). During the episode, they discussed [Programming & Metaprogramming in the Human Biocomputer](https://www.abebooks.com/9780517527573/Programming-Metaprogramming-Human-Biocomputer-Theory-051752757X/plp) by [John C. Lilly](https://en.wikipedia.org/wiki/John_C._Lilly), a book Wilson has mentioned so many times that it is now part of my library. Metzger said the words "running the script," which Wilson and Lilly have said countless times, but it was only at that moment that my brain said, "wait, they're talking about what I do every day for work..."
+
+Neither Wilson nor Lilly were software engineers, and they were using terminology from 40+ years ago when writing about this stuff. Oddly, each time I read the words "running a script," my brain thought about two actors rehearsing lines, despite understanding that the mental model they were describing was based in computing.
+
+Then I thought about how that David Lynch video that I watched _loaded a script into memory_ immediately after meditating when people are arguably more susceptible to such things. Let's say that there was a bug in my automatic routine which was causing an infinite loop. To fix the bug, I added a new conditional, e.g.:
+
+```ts
+function run() {
+  if (isNegative(Me.currentMood)) {
+    Me.forcePositivity();
+  }
+}
+```
+
+This has had my brain in overdrive this A.M. How much of my life can I start to define as scripts and routines?
+
+Here's another one I noticed this morning:
+
+```ts
+function run() {
+  if (Human.isTryingToWork && Cat.isInLocation(Location.Lap)) {
+    Human.petCat();
+  }
+}
+```
+
+I'm interested in seeing how far I can run with this without going completely insane, but for now, I have other things to do, e.g.:
+
+```ts
+function run() {
+  if (Time.isAfter('8:30AM') && !Human.isWorking) {
+    Human.experienceGuilt();
+  } else if (Time.isBefore('9:30AM')) {
+    Human.journal();
+    Human.exercise();
+    Human.meditate();
+  }
+
+  Human.work();
+}
+```
+
+It's already 10:11 AM and, though I feel guilty, I am still going to exercise at least.
