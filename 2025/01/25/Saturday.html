@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>
+      Saturday
+      -
+      /dev/blog
+    </title>
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://meowsus.github.io/feed.xml">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script src="/assets/js/main.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body class="bg-slate-200">
+    <div class="container max-w-4xl mx-auto min-h-screen p-8 flex flex-col gap-8">
+      <header>
+        <h1 class="text-4xl font-bold">
+          <a class="text-blue-700 underline visited:text-blue-600 hover:text-blue-500" href="/">/dev/blog</a>
+        </h1>
+      </header>
+
+      <main class="flex-grow "><article>
+  <header class="mb-8">
+    <h1 class="text-2xl">Saturday</h1>
+    <p>
+      <time datetime="2025-01-25T00:00:00+00:00">January 25, 2025</time>
+    </p>
+  </header>
+  <section id="post-content" class="prose prose-lg max-w-4xl">
+    <p>Ok, hi. I told myself I wouldn’t work this week after having the revelation that I am often guilty of rolling off one project and immediately onto another. I wanted to change that behavior and give myself a break for two weeks to try and process the experience of being unemployed for half a year while also trying to visualize and prepare for the path ahead.</p>
+
+<p>So I’ve been “afk” for a few days, but I’ve still been noodling on this idea of cataloging the “scripts” I run, both automatically and manually, in my day to day life. I’m talking about <a href="/2025/01/25/Saturday.html">the idea I came up with on Tuesday</a>.</p>
+
+<p>I’ve had a lot of ideas since then. One was to switch over my daily journaling routine into a git repository where I could write down everything I did that day as a routine (or collection of scripts) but that felt like too much work. This is a very novel idea and I have been struggling with how it looks in practice. I did, however, create that git repository and decided to start small; by just creating little script files as they occur to me.</p>
+
+<p>My plan is to write these scripts in a separate repo and elaborate upon them in this blog. What I like about this idea is that, as a software engineer, I am accustomed to reading blog posts which contain code examples. A code example in a sea of related text is usually the thing my eye gravitates toward, because I can get the information I need from the example quickly.</p>
+
+<p>Architecturally I’m using static classes, mostly because it seems to improve the self-documentation of the script. I’m typically accustomed to functional programming but going the OOP approach is feeling right to me right now. Just a reminder, this is essentially pseudocode but, for whatever reason, I chose to use TypeScript so I need to actually stub out methods for each call. I’m tasking Copilot with this work.</p>
+
+<p>Okay, enough chit-chat. Here is what I have so far:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">Me</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="k">static</span> <span class="nx">isAwake</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+  <span class="nf">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Curt</span><span class="dl">"</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">static</span> <span class="nf">think</span><span class="p">(</span><span class="nx">message</span><span class="p">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="s2">`Thinks: </span><span class="p">${</span><span class="nx">message</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">static</span> <span class="nf">wakeUp</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nf">think</span><span class="p">(</span><span class="dl">"</span><span class="s2">Time to wake up</span><span class="dl">"</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">isAwake</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">Alarm</span> <span class="p">{</span>
+  <span class="k">static</span> <span class="nx">isSet</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="k">static</span> <span class="nx">time</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">6:00</span><span class="dl">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">Time</span> <span class="p">{</span>
+  <span class="k">static</span> <span class="nf">current</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nc">Date</span><span class="p">().</span><span class="nf">toLocaleTimeString</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">static</span> <span class="nf">equals</span><span class="p">(</span><span class="nx">time</span><span class="p">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nf">current</span><span class="p">()</span> <span class="o">===</span> <span class="nx">time</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">static</span> <span class="nf">isAfter</span><span class="p">(</span><span class="nx">start</span><span class="p">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">today</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="p">().</span><span class="nf">toLocaleDateString</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">startTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">today</span><span class="p">}</span><span class="s2"> </span><span class="p">${</span><span class="nx">start</span><span class="p">}</span><span class="s2">`</span><span class="p">).</span><span class="nf">getTime</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">time</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="p">(</span><span class="nx">startTime</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">random</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">));</span>
+
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nf">current</span><span class="p">()</span> <span class="o">===</span> <span class="nx">time</span><span class="p">.</span><span class="nf">toLocaleTimeString</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">Script</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="s2">`Running </span><span class="p">${</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="s2"> script`</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Not Implemented</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">WakeUpScript</span> <span class="kd">extends</span> <span class="nc">Script</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="dl">"</span><span class="s2">WakeUp</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nf">run</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">Alarm</span><span class="p">.</span><span class="nx">isSet</span> <span class="o">&amp;&amp;</span> <span class="nx">Time</span><span class="p">.</span><span class="nf">equals</span><span class="p">(</span><span class="nx">Alarm</span><span class="p">.</span><span class="nx">time</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">Me</span><span class="p">.</span><span class="nf">wakeUp</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">Alarm</span><span class="p">.</span><span class="nx">isSet</span> <span class="o">&amp;&amp;</span> <span class="nx">Time</span><span class="p">.</span><span class="nf">isAfter</span><span class="p">(</span><span class="dl">"</span><span class="s2">6:00</span><span class="dl">"</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">Me</span><span class="p">.</span><span class="nf">wakeUp</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">Me</span><span class="p">.</span><span class="nf">think</span><span class="p">(</span><span class="dl">"</span><span class="s2">Am I dead? I'm dead, aren't I?</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>A few things occur to me out of the gate:</p>
+
+<ol>
+  <li>I could have expressed this with the assumption that my Alarm is set on Monday, Tuesday, and Wednesday, because these are the days each week that I’m likely responsible for taking the kids to school.</li>
+  <li>I have</li>
+  <li>I could refactor this pretty easily.</li>
+</ol>
+
+  </section>
+</article>
+</main>
+
+      
+    </div>
+  </body>
+</html>

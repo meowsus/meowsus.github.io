@@ -6,13 +6,43 @@
     <atom:link href="https://meowsus.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>My intent with this blog is to catalog my daily work. I will try to dedicate the final 30 minutes of my day to this writing. I do this both for reflection and to free myself from any and all brainworms which may have attached themselves to me throughout the day.
 </description>
-    <lastBuildDate>Tue, 21 Jan 2025 18:15:50 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 04 Feb 2025 03:39:57 +0000</lastBuildDate>
     
     
     <item>
-      <title>Tuesday Morning</title>
+      <title>Monday</title>
       <link>
-        https://meowsus.github.io/2025/01/21/Tuesday-Morning.html
+        https://meowsus.github.io/2025/02/03/Monday.html
+      </link>
+      <description>
+        &lt;p&gt;Sorry for the break, David, but I did end up going &lt;a href=&quot;/2025/01/25/Saturday.html&quot;&gt;a little crazy&lt;/a&gt;. I followed the whole self-scripting thing a bit too deeply, got frustrated, and took a two-week mental break. Well, kind of. I still made some pretty good progress on &lt;a href=&quot;https://github.com/meowsus/journai&quot;&gt;Journai&lt;/a&gt;. Now I can wr...
+      </description>
+      <pubDate>Mon, 03 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/02/03/Monday.html
+      </guid>
+    </item>
+    
+    <item>
+      <title>Saturday</title>
+      <link>
+        https://meowsus.github.io/2025/01/25/Saturday.html
+      </link>
+      <description>
+        &lt;p&gt;Ok, hi. I told myself I wouldn’t work this week after having the revelation that I am often guilty of rolling off one project and immediately onto another. I wanted to change that behavior and give myself a break for two weeks to try and process the experience of being unemployed for half a year while also trying to visualize and prepare for the path ahead.&lt;/p&gt;
+
+&lt;p&gt;So I’ve ...
+      </description>
+      <pubDate>Sat, 25 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/01/25/Saturday.html
+      </guid>
+    </item>
+    
+    <item>
+      <title>Tuesday</title>
+      <link>
+        https://meowsus.github.io/2025/01/21/Tuesday.html
       </link>
       <description>
         &lt;p&gt;In lieu of journaling this morning, I wanted to write this post because my brain was all fired up after a series of information streams from yesterday connected in an interesting way for me this morning while I was staring at my dishes.&lt;/p&gt;
@@ -21,7 +51,7 @@
       </description>
       <pubDate>Tue, 21 Jan 2025 00:00:00 +0000</pubDate>
       <guid>
-        https://meowsus.github.io/2025/01/21/Tuesday-Morning.html
+        https://meowsus.github.io/2025/01/21/Tuesday.html
       </guid>
     </item>
     
