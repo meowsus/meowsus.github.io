@@ -8,8 +8,12 @@ module.exports = {
     "./*.html",
   ],
   theme: {
-    theme: {
-      extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Poppins", "system-ui"],
+        serif: ["EB Garamond", "Georgia"],
+        mono: ["Fira Code", "SFMono-Regular"],
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
