@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>
+      Friday
+      -
+      /dev/blog
+    </title>
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://meowsus.github.io/feed.xml">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script src="/assets/js/main.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body class="bg-slate-200">
+    <div class="container max-w-4xl mx-auto min-h-screen p-8 flex flex-col gap-8">
+      <header>
+        <h1 class="text-4xl font-bold">
+          <a class="text-blue-700 underline visited:text-blue-600 hover:text-blue-500" href="/">/dev/blog</a>
+        </h1>
+      </header>
+
+      <main class="flex-grow "><article>
+  <header class="mb-8">
+    <h1 class="text-2xl">Friday</h1>
+    <p>
+      <time datetime="2025-02-07T00:00:00+00:00">February 7, 2025</time>
+    </p>
+  </header>
+  <section id="post-content" class="prose prose-lg max-w-4xl">
+    <p>It’s Friyay and I just worked my first honest-to-God 40-hour work week in probably three years.</p>
+
+<p>I’m not saying that I’m one of those suspected corporate scofflaws who jag their days away while collecting maximal pay; the kind Silicon Valley is currently trying to drag back to the office five days a week to see if they need to be fired or not. I’m saying that, when salaried, my job becomes focused on responsibilities. I ask myself questions like “What do I need to get done today?” or “What does my team need from me this week?” instead of “How in the hell am I going to fill my time sheet?” Honestly, logging hours takes up a lot of room in my brain. I’m a bit of a satisfactionalist (objectively, not a word) and really need to log at least forty hours a week, by hook or by crook. I guess not “by crook.” <code class="language-plaintext highlighter-rouge">&lt;richard-nixon-voice&gt;I am not a crook&lt;/richard-nixon-voice&gt;</code> (objectively, not HTML).</p>
+
+<p>The transition from being unemployed to being 100% fully employed was less jarring than I suspected. The company I joined has no real engineering onboarding process to speak of. They seem to either (a) hire people who know what they’re doing already or (b) want to teach people by throwing them into the deep end. I’m in no way <em>a</em> and purposefully refrained from <em>b</em> to try to get closer to <em>a</em> by next week. In short, this week I read a hecka large amount of documentation and judged its authors, verily.</p>
+
+<p>In this chapter of my life, I’ve found myself working on Shopify, or: If Rails Favored Configuration Over Convention, as I have been calling it. I haven’t built a Shopify site in over 15 years and, over that time, they have absolutely exploded in popularity. It’s interesting to me that while they grew, I worked on <a href="https://github.com/workarea-commerce/workarea">a weak-sauce competitor</a> for the behemoth platform. An anemic David (not to be confused with the only person who reads this blog) versus Thee Goliath. I was totally ignorant of the way they did things, but the way <em>we</em> did things was essentially The Rails Way™ but with online commerce attached. It felt reasonable.</p>
+
+<p>Shopify doesn’t feel reasonable. They seem to be a victim of their own popularity. While working in their bananas-ass ecosystem, you can smell all sorts of personal projects that just so happened to make the release cut, gained popularity with the masses, and then became everyone else at Shopify’s problem to support. And it makes sense. As someone seasoned (heavily, on all sides, especially the fat-cap) in commerce platform development, I acutely understand the difficulties that arise from popularity. The difference here is that my platform was in service of the rest of my company, plus a handful of other companies insane enough to bet on its success. Shopify is now in service of the majority of the world.</p>
+
+<p>To make things even <em>crazier</em>, I’m working with six people from said weak-sauce competitor company, three of whom used to implement my code. It feels a bit like karmic retribution. I tortured them for years with my wild core changes, and now I’m their contractor. I can’t shake the feeling that my working for them is my cosmic act of contrition. They are being kind… for now… but I wouldn’t fault them whatsoever if they decided to start taking a decade of frustration out on me. I deserve it. I was The Man In The High Tower of the frontend. I was their Shopify at the time. I deserve whatever abuse comes my way.</p>
+
+<p>But they’ve all been wonderfully accepting of me. They have said the most kind things to me and to the right people in the company to land me this job. I am very much in their debt.</p>
+
+<p>Anyway, here I am, after six or so years of hardcore TypeScript &amp; React, back in the HTML, CSS, and JavaScript world. It’s crazy how much can change in six years. This is essentially the same team I worked with back then, and they have been working on a framework that I helped create. So, like, their <em>attitude</em> towards how they build commerce sites hasn’t changed, but their <em>approach</em> has solidified massively over the years. I feel like a father reuniting with his child after so many years away. I feel pride in how this framework has grown.</p>
+
+<p>The main difference I’m spotting is that there is no jQuery, which is a good thing. The browser APIs have long been standardized in such a way that makes jQuery essentially syntactic sugar on top of vanilla JavaScript, making it almost entirely obsolete. They’re using native <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements">custom elements</a> now, which is a path never before presented to me in all my travels. Looking at their code, I see tons of reasonable and, frankly, awe-inspiring decisions.</p>
+
+<p>My week was spent reading documentation approximately six hours a day. When my brain became full and I noticed myself wanting to lie, drooling, on the floor, I switched it up by watching YouTube videos. It seems like Shopify has grown so quickly that it is difficult to get the right information at the right time for the right version. The canonical source of truth is their documentation, but that documentation, at least for theming, feels comically non-linear. They seem to have difficulty in helping engineers create a mental model of their platform’s offerings while simultaneously guard-railing you twelve ways from Sunday. Being a totally unique platform, conceptually speaking, I found myself forgetting what section of the docs I was in at any given time.</p>
+
+<p>In the broadest of strokes, I understood that:</p>
+
+<ol>
+  <li>Layouts encapsulate Templates &amp; Section Groups</li>
+  <li>Templates &amp; Section Groups encapsulate Sections</li>
+  <li>Sections encapsulate Blocks, or don’t</li>
+</ol>
+
+<p>And that:</p>
+
+<ol>
+  <li>Layouts are written in Liquid</li>
+  <li>Section Groups are written in JSON</li>
+  <li>Templates should be written in JSON but can be written in Liquid
+a. Some Templates <em>must</em> be written in Liquid</li>
+  <li>Sections are written in Liquid</li>
+  <li>Blocks are written in Liquid</li>
+</ol>
+
+<p>And that there are also Snippets, which can be used in</p>
+
+<ol>
+  <li>Layouts</li>
+  <li>Liquid Templates</li>
+  <li>Sections</li>
+  <li>Blocks</li>
+</ol>
+
+<p>I think…</p>
+
+<p>It’s a confusing mental model to even summarize. There is also very little understanding as to <em>why</em> Shopify is structured like this. My best guess, from being on the platform engineering side of things for so long, is that they are forced to make concessions over time that allow for backwards compatibility. Like, you might recall that the migration between version 1 and version 2 of Magento was likened to a complete re-platforming.</p>
+
+<p>I could speculate about the history of engineering at Shopify, but I don’t think it’s too important. What would be useful would be to have some idea of how the platform works <em>behind the scenes</em>, but that secret sauce would undoubtedly start to overthrow their tyrannous domination of the market so, alas, I must piece this puzzle together using their incredibly cyclical and repetitive documentation and what quasi-similar experiences I’ve had working on a massive Rails commerce monolith myself.</p>
+
+<p>In summary, I am very happy to have a job again. I couldn’t be happier that it’s with six good friends from years past. Ultimately, my interests lie in engineering efficiency and production since I very much enjoy the work of a staff engineer, but I won’t be able to make helpful and useful suggestions to that end if I do not first experience the pain points in a development process for myself.</p>
+
+<p>We should be using TypeScript though…</p>
+
+  </section>
+</article>
+</main>
+
+      
+    </div>
+  </body>
+</html>
