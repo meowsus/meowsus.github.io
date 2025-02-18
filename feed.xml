@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>/dev/blog</title>
+    <title>Welcome To Meow Town 🐱</title>
     <link>https://meowsus.github.io</link>
     <atom:link href="https://meowsus.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <description>My intent with this blog is to catalog my daily work. I will try to dedicate the final 30 minutes of my day to this writing. I do this both for reflection and to free myself from any and all brainworms which may have attached themselves to me throughout the day.
-</description>
-    <lastBuildDate>Wed, 12 Feb 2025 07:02:53 +0000</lastBuildDate>
+    <description></description>
+    <lastBuildDate>Tue, 18 Feb 2025 06:34:38 +0000</lastBuildDate>
     
+    
+    <item>
+      <title>Monday</title>
+      <link>
+        https://meowsus.github.io/2025/02/17/Monday.html
+      </link>
+      <description>
+        &lt;p&gt;After spending the last hour rejiggering the intent of this blog and adding an ASCII cat–for literally no reason–I think I’m ready to write.&lt;/p&gt;
+
+&lt;p&gt;In the &lt;a href=&quot;/2025/02/11/Tuesday.html&quot;&gt;last post&lt;/a&gt; I hinted that there was a point to all my rambling. That point was that I’m busy. I’m a single dad. I have two kids. I own a home. I usually have a f...
+      </description>
+      <pubDate>Mon, 17 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/02/17/Monday.html
+      </guid>
+    </item>
     
     <item>
       <title>Tuesday</title>
