@@ -1,13 +1,8 @@
 url: "https://meowsus.github.io"
 baseurl: ""
-title: "/dev/blog"
+title: "Welcome to Meow Town"
 plugins:
   - jekyll-postcss
 postcss:
   cache: false
-description: >
-  My intent with this blog is to catalog my daily work. I will try to dedicate
-  the final 30 minutes of my day to this writing. I do this both for reflection
-  and to free myself from any and all brainworms which may have attached
-  themselves to me throughout the day.
 unemployed: false
