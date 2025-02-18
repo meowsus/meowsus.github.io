@@ -1,6 +1,6 @@
 url: "https://meowsus.github.io"
 baseurl: ""
-title: "Welcome to Meow Town"
+title: "Welcome To Meow Town 🐱"
 plugins:
   - jekyll-postcss
 postcss:
