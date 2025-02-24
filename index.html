@@ -20,7 +20,8 @@ title: Home
       <a class="link" href="{{ post.url }}"
         >{{ post.date | date: "%B %-d, %Y" }} - {{ post.title }}</a
       >
-      &nbsp;{{ post.excerpt | strip_html }}
+      {% if post.subtitle %} or: {{ post.subtitle }} {% else %} {{ post.excerpt
+      | strip_html }} {% endif %}
     </li>
     {% endfor %}
   </ul>
