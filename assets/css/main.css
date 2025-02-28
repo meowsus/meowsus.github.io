@@ -6,6 +6,10 @@
 @tailwind utilities;
 
 @layer base {
+  @view-transition {
+    navigation: auto;
+  }
+
   html {
     font-variant-ligatures: common-ligatures;
   }
