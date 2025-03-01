@@ -29,7 +29,7 @@
   </head>
   <body class="font-sans bg-slate-100">
     <div class="container max-w-4xl mx-auto min-h-screen p-8 flex flex-col gap-8">
-      <header>
+      <header id="site-header">
         <h1 aria-label="{{ site.title }}">
           <a
             class="text-xs flex items-center gap-2"
@@ -51,7 +51,7 @@
         </h1>
       </header>
 
-      <main class="flex-grow {{ page.content_class_names }}">{{ content }}</main>
+      <main id="main-content" class="flex-grow {{ page.content_class_names }}">{{ content }}</main>
 
       {% if site.unemployed %}
         <footer class="border-t border-slate-300 pt-8">

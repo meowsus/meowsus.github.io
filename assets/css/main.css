@@ -10,6 +10,44 @@
     navigation: auto;
   }
 
+  #main-content {
+    view-transition-name: main-content;
+  }
+
+  ::view-transition-group(root) {
+    animation: none;
+  }
+
+  ::view-transition-old(main-content) {
+    animation: transition-out 0.3s ease-out;
+  }
+
+  ::view-transition-new(main-content) {
+    animation: transition-in 0.3s ease-in;
+  }
+
+  @keyframes transition-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+  }
+
+  @keyframes transition-in {
+    from {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   html {
     font-variant-ligatures: common-ligatures;
   }
