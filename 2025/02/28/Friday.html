@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>
+      Friday
+      -
+      Welcome To Meow Town 🐱
+    </title>
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://meowsus.github.io/feed.xml">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script src="/assets/js/main.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Fira+Code:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    >
+
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body class="font-sans bg-slate-100">
+    <div class="container max-w-4xl mx-auto min-h-screen p-8 flex flex-col gap-8">
+      <header id="site-header">
+        <h1 aria-label="Welcome To Meow Town 🐱">
+          <a
+            class="text-xs flex items-center gap-2"
+            href="/"
+          >
+            <pre class="font-mono">
+ ,_     _
+ |\\_,-~/
+ / _  _ |    ,--.
+(  @  @ )   / ,-'
+ \  _T_/-._( (
+ /         `. \
+|         _  \ |
+ \ \ ,  /      |
+  || |-_\__   /
+ ((_/`(____,-'
+            </pre>
+          </a>
+        </h1>
+      </header>
+
+      <main id="main-content" class="flex-grow "><article>
+  <header class="mb-8">
+    <h1 class="text-2xl">
+      Friday
+      
+        <span class="italic text-gray-600">or: an opportunity to be paid to learn a thing.</span>
+      
+    </h1>
+
+    <p>
+      <time datetime="2025-02-28T00:00:00+00:00">February 28, 2025</time>
+    </p>
+  </header>
+  <section class="prose prose-lg max-w-4xl">
+    <p>Admittedly my attitude toward being a contractor is a bit skewed. The guilt that I feel when I find myself reaching for my staff engineer hat is really unfounded. This has been reinforced many times over while speaking to my manager and his manager along with the other members of my team. I’m seen as a full time employee; the contract thing is just a formality. After being unemployed longer than I expected and losing nearly all faith in myself and others, I’m starting to learn how to trust again.</p>
+
+<p>That being said, I still feel a twinge when I’m being asked to work on things that are not immediately actionable and potentially risky to the business. The risk I’m talking about is tied to my role and that Always Be Billing™ feeling I talked about <a href="/2025/02/23/Sunday.html">on Sunday</a>. For absolution I had to force my manager to tell me to spend my whole day spiking on some new technology none of us have ever used before. He did and that’s why we’re here.</p>
+
+<p>I guess what I’m saying is that I noticed that being paid to learn was something I used to take for granted. It’s nice to be reminded that learning some new technology can very much be part of my new role.</p>
+
+<p>The technology I’m talking about is <a href="https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API">View Transition Web API</a>. The project I’ll be trying to use it on is a Shopify website that will only be accessed by a Chrome browser inside an Android environment inside of a Kiosk inside of a showroom inside of Philadelphia. But first I’ll be trying it out here inside of my blog. I want to take this approach because (a) I’ve never used this API before, (b) I’m still a bit shaky on Shopify Development in general and my company’s specific approach to it, and (c) this blog is simple and kind of a perfect candidate for a basic spike implementation. In other words, the concepts I can teach myself today in this familiar environment should be able to clear out tons of guesswork in an environment with which I’m less familiar.</p>
+
+<h2 id="initial-impressions">Initial impressions</h2>
+
+<p>This is just native <a href="https://github.com/turbolinks/turbolinks">turbolinks</a>, right? I mean that was its huge selling point besides it being shipped out almost by default to every pre-webpacker Rails instance. “Want your MPA to <em>feel</em> like an SPA? Try this one quick fix…” Obviously this is a library that you can just plunk into your codebase so it’ll require some actual neuromancy, but that should come with some more control.</p>
+
+<p>Without getting too derailed before we begin, I’m curious if this API will play nice with the way my company already handles asynchronous DOM updates. Briefly, we use a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements">custom element</a> that identifies a region of the page which might be replaced with the same element on a different page after an async action occurs. An example of this is product filtering on a search page. We allow users to change filter values without requiring a full page reload by announcing that a filter choice has been made by the user. That announcement is received by our custom pubsub framework which receives the DOM from the next page after it has been requested using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. If any of those custom elements are found to match the result of the DOM in the async request, they are replaced on the page and their containing scripts are re-run. It’s like a home-brewed <a href="https://htmx.org/">htmx</a> clone that we’re still proving out, but you can see how these types of interactions might not play well with the View Transition API since the former was written before we considered the latter.</p>
+
+<p>Side note: the urge to drop htmx into the theme is very real, as is the urge to do the same with <a href="https://alpinejs.dev/">Alpine</a>, but I digress.</p>
+
+<h2 id="simple-implementation">Simple implementation</h2>
+
+<p>Arguably the easiest implementation would be to get same-origin links transitioning. I’m specifying “same-origin” here because I already have a bit o’ global JavaScript code which intercepts clicks inside of my compiled Markdown documents and forces cross-origin links to open in a new window:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Ensure all anchors within the #post-content element open in a new tab</span>
+<span class="kd">function</span> <span class="nf">postContentAnchorTarget</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">postContent</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">post-content</span><span class="dl">"</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">anchors</span> <span class="o">=</span> <span class="nx">postContent</span><span class="p">.</span><span class="nf">querySelectorAll</span><span class="p">(</span><span class="dl">"</span><span class="s2">a</span><span class="dl">"</span><span class="p">);</span>
+
+  <span class="nx">anchors</span><span class="p">.</span><span class="nf">forEach</span><span class="p">(</span><span class="nf">function </span><span class="p">(</span><span class="nx">anchor</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">anchor</span><span class="p">.</span><span class="nx">href</span><span class="p">.</span><span class="nf">startsWith</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">origin</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">anchor</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">target</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">_blank</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// On document load</span>
+<span class="nb">document</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">DOMContentLoaded</span><span class="dl">"</span><span class="p">,</span> <span class="nf">function </span><span class="p">()</span> <span class="p">{</span>
+  <span class="nf">postContentAnchorTarget</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;sarcasm&gt;</code>Wow, <em>great naming</em> January Curt. I totally and immediately understand what a “post content anchor target” function is all about just by reading its name.<code class="language-plaintext highlighter-rouge">&lt;/sarcasm&gt;</code></p>
+
+<p>Anyway, let’s check <a href="https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API/Using">the docs</a>. Hmm, okay so it seems like <em>most</em> browsers (I’m stink-eyeing <em>you</em>, Firefox) have been imbued with a new superpower, namely <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition"><code class="language-plaintext highlighter-rouge">document.startViewTransition()</code></a>. This function would only be used for single-page applications and this blog is a multi-page application just like Shopify Themes. That would mean that I’d hook into the new CSS at-rule named <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition"><code class="language-plaintext highlighter-rouge">@view-transition</code></a>. This coupled with a new CSS property named <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/view-transition-name"><code class="language-plaintext highlighter-rouge">view-transition-name</code></a> should allow me to opt-in to the new transition API.</p>
+
+<p>Ok, so let’s try it! I’m throwing this in my <code class="language-plaintext highlighter-rouge">main.css</code> file which is referenced on every page:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@view-transition</span> <span class="p">{</span>
+  <span class="py">navigation</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>That was easy… Almost <em>too</em> easy… Now when I click on any page in my app I get a cute little 0-to-1 opacity transition. It makes me feel a little queasy but it works! Oh, wait… It looks like we can customize the transition with norm-core animations:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@view-transition</span> <span class="p">{</span>
+  <span class="py">navigation</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@keyframes</span> <span class="n">move-out</span> <span class="p">{</span>
+  <span class="nt">from</span> <span class="p">{</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">0%</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nt">to</span> <span class="p">{</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">-100%</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">@keyframes</span> <span class="n">move-in</span> <span class="p">{</span>
+  <span class="nt">from</span> <span class="p">{</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">100%</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nt">to</span> <span class="p">{</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">0%</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">::view-transition-old</span><span class="o">(</span><span class="nt">root</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation</span><span class="p">:</span> <span class="m">0.4s</span> <span class="n">ease-in</span> <span class="nb">both</span> <span class="n">move-out</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">::view-transition-new</span><span class="o">(</span><span class="nt">root</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation</span><span class="p">:</span> <span class="m">0.4s</span> <span class="n">ease-in</span> <span class="nb">both</span> <span class="n">move-in</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This example is copy-pasta’d straight from the docs, but now the pages vertically scroll into view which makes me feel both queasy and horribly disoriented, since the entire page now scrolls with each new page load. But this is cool. With these new <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::view-transition-old">pseudo</a> <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::view-transition-new">elements</a> we have a lot of control over how we can handle these transitional “snapshots”.</p>
+
+<p>Maybe we can get the jarring effect to chill out a little bit if we only scroll in the content of the page, and not the header. We should be able to use <code class="language-plaintext highlighter-rouge">view-transition-name</code> for this.</p>
+
+<p>My post markup looks like this now:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;header</span> <span class="na">id=</span><span class="s">"site-header"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Cat Image --&gt;</span>
+  <span class="nt">&lt;/header&gt;</span>
+  <span class="nt">&lt;main</span> <span class="na">id=</span><span class="s">"main-content"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;article&gt;</span>
+      <span class="nt">&lt;header&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>...<span class="nt">&lt;/h1&gt;</span>
+      <span class="nt">&lt;/header&gt;</span>
+
+      <span class="nt">&lt;section&gt;</span>blah blahs<span class="nt">&lt;/section&gt;</span>
+    <span class="nt">&lt;/article&gt;</span>
+  <span class="nt">&lt;/main&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</code></pre></div></div>
+
+<p>I can define a <code class="language-plaintext highlighter-rouge">view-transition-name</code> for the main content in my CSS:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@view-transition</span> <span class="p">{</span>
+  <span class="py">navigation</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nf">#main-content</span> <span class="p">{</span>
+  <span class="py">view-transition-name</span><span class="p">:</span> <span class="n">main-content</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>As long as you don’t judge me too harshly for applying styles directly to ID selectors (<a href="https://mzrn.sh/2022/04/09/starting-a-blank-jekyll-site-with-tailwind-css-in-2022/">I’m using Tailwind in this blog</a> so I’m keeping things separate for now</p>
+
+<p>I can stop the <code class="language-plaintext highlighter-rouge">root</code> snapshot animations with:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">::view-transition-group</span><span class="o">(</span><span class="nt">root</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Then I an mess with the animation duration of the <code class="language-plaintext highlighter-rouge">main-content</code> snapshots independently with:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">::view-transition-group</span><span class="o">(</span><span class="nt">main-content</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation-duration</span><span class="p">:</span> <span class="m">0.3s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This makes things a bit snappier, but I do kind of want a motion transition. Let’s define some transitions and use them instead:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@keyframes</span> <span class="n">transition-out</span> <span class="p">{</span>
+  <span class="nt">from</span> <span class="p">{</span>
+    <span class="nl">opacity</span><span class="p">:</span> <span class="m">1</span><span class="p">;</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nt">to</span> <span class="p">{</span>
+    <span class="nl">opacity</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">-0.5rem</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">@keyframes</span> <span class="n">transition-in</span> <span class="p">{</span>
+  <span class="nt">from</span> <span class="p">{</span>
+    <span class="nl">opacity</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">-0.5rem</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nt">to</span> <span class="p">{</span>
+    <span class="nl">opacity</span><span class="p">:</span> <span class="m">1</span><span class="p">;</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">::view-transition-old</span><span class="o">(</span><span class="nt">main-content</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation</span><span class="p">:</span> <span class="n">transition-out</span> <span class="m">0.3s</span> <span class="n">ease-out</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">::view-transition-new</span><span class="o">(</span><span class="nt">main-content</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation</span><span class="p">:</span> <span class="n">transition-in</span> <span class="m">0.3s</span> <span class="n">ease-in</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Aw, yiss. Motherfuckin’ transitions! My full code looks like this now:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@view-transition</span> <span class="p">{</span>
+  <span class="py">navigation</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nf">#main-content</span> <span class="p">{</span>
+  <span class="py">view-transition-name</span><span class="p">:</span> <span class="n">main-content</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">::view-transition-group</span><span class="o">(</span><span class="nt">root</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">::view-transition-old</span><span class="o">(</span><span class="nt">main-content</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation</span><span class="p">:</span> <span class="n">transition-out</span> <span class="m">0.3s</span> <span class="n">ease-out</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nd">::view-transition-new</span><span class="o">(</span><span class="nt">main-content</span><span class="o">)</span> <span class="p">{</span>
+  <span class="nl">animation</span><span class="p">:</span> <span class="n">transition-in</span> <span class="m">0.3s</span> <span class="n">ease-in</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@keyframes</span> <span class="n">transition-out</span> <span class="p">{</span>
+  <span class="nt">from</span> <span class="p">{</span>
+    <span class="nl">opacity</span><span class="p">:</span> <span class="m">1</span><span class="p">;</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nt">to</span> <span class="p">{</span>
+    <span class="nl">opacity</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">-0.5rem</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">@keyframes</span> <span class="n">transition-in</span> <span class="p">{</span>
+  <span class="nt">from</span> <span class="p">{</span>
+    <span class="nl">opacity</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">-0.5rem</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nt">to</span> <span class="p">{</span>
+    <span class="nl">opacity</span><span class="p">:</span> <span class="m">1</span><span class="p">;</span>
+    <span class="nl">transform</span><span class="p">:</span> <span class="n">translateY</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This looks pretty good, in my opinion. This is a pretty quick example with minimal code, but already it gives me a snappier feeling when the content is loading.</p>
+
+<p>Some ideas I have to further investigate are:</p>
+
+<ul>
+  <li>Try to get a loading bar to show up at the top of the page for non-mobile users</li>
+  <li>On click, make it appear as though content is being loaded/updated asynchronously</li>
+</ul>
+
+<p>But I’ll save those for a follow-up post.</p>
+
+  </section>
+</article>
+</main>
+
+      
+    </div>
+  </body>
+</html>
