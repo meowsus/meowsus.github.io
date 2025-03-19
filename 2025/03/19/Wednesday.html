@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>
+      Wednesday
+      -
+      Welcome To Meow Town 🐱
+    </title>
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://meowsus.github.io/feed.xml">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script src="/assets/js/main.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Fira+Code:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    >
+
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body class="font-sans bg-slate-100">
+    <div class="container max-w-4xl mx-auto min-h-screen p-8 flex flex-col gap-8">
+      <header id="site-header">
+        <h1 aria-label="Welcome To Meow Town 🐱">
+          <a
+            class="text-xs flex items-center gap-2"
+            href="/"
+          >
+            <pre class="font-mono">
+ ,_     _
+ |\\_,-~/
+ / _  _ |    ,--.
+(  @  @ )   / ,-'
+ \  _T_/-._( (
+ /         `. \
+|         _  \ |
+ \ \ ,  /      |
+  || |-_\__   /
+ ((_/`(____,-'
+            </pre>
+          </a>
+        </h1>
+      </header>
+
+      <main id="main-content" class="flex-grow "><article>
+  <header class="mb-8">
+    <h1 class="text-2xl">
+      Wednesday
+      
+        <span class="italic text-gray-600">or: will work for knowledge</span>
+      
+    </h1>
+
+    <p>
+      <time datetime="2025-03-19T00:00:00+00:00">March 19, 2025</time>
+    </p>
+  </header>
+  <section class="prose prose-lg max-w-4xl">
+    <p>As I’ve already mentioned <a href="/2025/02/28/Friday.html">I’m skittish about being non-billable</a>. Yet, here I am again, being paid to learn a thing.</p>
+
+<p>I’m working on kiosk software, a niche my company seems eager to explore. I’m only about 7 weeks into working here but I think I’m settling in nicely. I’m able to apply a lot of the <a href="https://dev.to/jmfayard/laziness-impatience-and-hubris-1ea9">laziness</a> that I enjoy to pretty much every task. I have yet to plumb the depths of Shopify’s metafields or metaobjects to build out a significantly customizable feature, but still I’m ripping through my sprints at an uncomfortable speed and with much perceived peer fanfare.</p>
+
+<p>But being a “make thing look good” developer, at my salary, isn’t right. Yes, I can get a lot done in little time, but you could also pay a room of brain-damaged monkeys half a sack of peanuts to do most of what I’ve been doing. So I’m looking for my footing; my personal <em>proof of indispensability</em> to the company.</p>
+
+<p>Since we just banged out a kiosk app entirely in Liquid, I’ve reflected on what went wrong, or what could have gone easier, during the build. These issues have stemmed from team and hardware assumptions, mostly, and the novelty of the entire endeavor. Without going into too much detail, I’ll say that I’m betting the rest of my week that custom Hydrogen-based storefronts will be a better match for these types of projects going forward.</p>
+
+<p>The problem is that no one here has worked on Hydrogen before, myself included. And this could be a boon to my indispensability stat.</p>
+
+<h2 id="getting-started">Getting started</h2>
+
+<p>I love reading that type of documentation, don’t you? “Here, copy this command and <em>bang</em> you’re done!” We’ll see about that.</p>
+
+<p>The docs want me to run:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm create @shopify/hydrogen@latest -- --quickstart
+</code></pre></div></div>
+
+<p>First of all, I’ve created a <code class="language-plaintext highlighter-rouge">pnpm</code> project because I want things in packages. Yes, I know you can do this with <code class="language-plaintext highlighter-rouge">npm</code> but, man, <code class="language-plaintext highlighter-rouge">pnpm</code> just hits different.</p>
+
+<p>So I run <code class="language-plaintext highlighter-rouge">pnpm create @shopify/hydrogen@latest -- --quickstart</code> instead, only to find that their generated app is in JavaScript, by default. I want TypeScript. I miss TypeScript.</p>
+
+<p>After a bit of snooping, I find some <a href="https://shopify.dev/docs/api/shopify-cli/hydrogen/hydrogen-init#flags-propertydetail-quickstart">documentation</a> indicating that <code class="language-plaintext highlighter-rouge">--quickstart</code> is shorthand for <code class="language-plaintext highlighter-rouge">shopify hydrogen init --path hydrogen-quickstart --mock-shop --language js --shortcut --routes --markets none</code>. It turns out that by just running <code class="language-plaintext highlighter-rouge">pnpm create @shopify/hydrogen@latest</code> is just as much of a quickstart and allows you to customize these things through a CLI wizard.</p>
+
+<p>Now I’ve got a TypeScript project called <code class="language-plaintext highlighter-rouge">hydrogen-storefront</code> inside my <code class="language-plaintext highlighter-rouge">packages/</code> directory and it’s using Tailwind to boot, much to the future chagrin of my frontend brethren. I’ll convert them one of these days.</p>
+
+<p>But wait, the default Tailwind install is borked. When I run <code class="language-plaintext highlighter-rouge">pnpm dev</code> from inside the newly created project directory and try to view the homepage in the browser, I’m met with this error in my console:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10:37:41 AM [vite] Internal server error: Can't resolve 'tailwindcss' in '/home/meowsus/Work/Sandbox/hydrogen-demo/packages/hydrogen-storefront/app/styles'
+  Plugin: @tailwindcss/vite:generate:serve
+  File: /home/meowsus/Work/Sandbox/hydrogen-demo/packages/hydrogen-storefront/app/styles/tailwind.css?direct
+  ...
+</code></pre></div></div>
+
+<p>The only mention of “tailwind” in the project’s <code class="language-plaintext highlighter-rouge">package.json</code> is from <code class="language-plaintext highlighter-rouge">"@tailwindcss/vite": "4.0.0-beta.8"</code>… Well, that’s probably the problem… why wouldn’t Hydrogen ship with its own version of Tailwind declared? And isn’t Tailwind 4.0 out of beta at this point? I’m going to just install the latest version of Tailwind and this vite plugin and see if that helps.</p>
+
+<p>But wait, why are <a href="https://tailwindcss.com/docs/installation/using-vite">the Tailwind docs</a> reporting that you should install v4 like so?</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install tailwindcss @tailwindcss/vite
+</code></pre></div></div>
+
+<p>I’m surprised that there’s no <code class="language-plaintext highlighter-rouge">--save-dev</code> in there, since Tailwind isn’t a runtime dependency. Apparently <a href="https://github.com/tailwindlabs/tailwindcss/discussions/13854">others noticed this too</a>. Whatever. It’s going in <code class="language-plaintext highlighter-rouge">devDependencies</code> and to hell with their documentation:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pnpm i -D tailwindcss@latest @tailwindcss/vite@latest
+</code></pre></div></div>
+
+<p>Lo and behold, we have <code class="language-plaintext highlighter-rouge">v4.0.14</code>:</p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh">diff --git a/packages/hydrogen-storefront/package.json b/packages/hydrogen-storefront/package.json
+index f6ff83b..fce54a9 100644
+</span><span class="gd">--- a/packages/hydrogen-storefront/package.json
+</span><span class="gi">+++ b/packages/hydrogen-storefront/package.json
+</span><span class="p">@@ -35,7 +35,7 @@</span>
+     "@shopify/mini-oxygen": "^3.1.1",
+     "@shopify/oxygen-workers-types": "^4.1.2",
+     "@shopify/prettier-config": "^1.1.2",
+<span class="gd">-    "@tailwindcss/vite": "4.0.0-beta.8",
+</span><span class="gi">+    "@tailwindcss/vite": "4.0.14",
+</span>     "@total-typescript/ts-reset": "^0.4.2",
+     "@types/eslint": "^9.6.1",
+     "@types/react": "^18.2.22",
+<span class="p">@@ -53,6 +53,7 @@</span>
+     "eslint-plugin-react-hooks": "^5.1.0",
+     "globals": "^15.14.0",
+     "prettier": "^2.8.4",
+<span class="gi">+    "tailwindcss": "^4.0.14",
+</span>     "typescript": "^5.2.2",
+     "vite": "^5.1.8",
+     "vite-tsconfig-paths": "^4.3.1"
+</code></pre></div></div>
+
+<p>Sure enough, running <code class="language-plaintext highlighter-rouge">pnpm dev</code> in the hydrogen directory now runs error-free.</p>
+
+<h2 id="what-next">What next?</h2>
+
+<p>Well, I don’t know.</p>
+
+<p>Since I’m spiking this week, it would probably behoove me to figure out the shape of the thing I want to construct by the end of the week.</p>
+
+<p>After reading some documentation, browsing the newly created codebase, and watching some bespoke, sub-half-hour YouTube videos, it’s pretty apparent that Hydrogen is just Shopified <a href="https://remix.run/">Remix</a>, and Remix is just alternative Next.js.</p>
+
+<p>Hydrogen lets you write in React to build a storefront, as opposed to being confined to just having to write Liquid, HTML, CSS, and JavaScript for a traditional Shopify theme. Still, in the end, we have a website and a website may not be what we want for a kiosk.</p>
+
+<p>Neither solution is an SPA but with Hydrogen you’re a lot closer to an SPA-like experience, since you are using React to build your site. We can get similar results in Liquid by using something like <a href="https://htmx.org/">htmx</a>. If JavaScript is broken or disabled, however, our Liquid theme would fall down much more quickly than our Hydrogen app, since Remix runs the backend and can technically ship without any client-side React. You can spend a lot of time and get similar results with Liquid, but agency work and “spending a lot of time” are kind of competing concepts.</p>
+
+<h2 id="but-whats-the-problems-were-trying-to-solve">But what’s the problem(s) we’re trying to solve?</h2>
+
+<p>During the development of our current kiosk project there were a few issues that we encountered:</p>
+
+<ol>
+  <li>We relied on JavaScript a lot more than we would in a traditional Shopify theme project because we were chasing that native-like or SPA-like experience.</li>
+  <li>We totally bypassed checkout because the order gets sent to a POS system for a sales associate to pick up and walk through with the customer.</li>
+  <li>We had a <em>ton</em> of extra unused code in the codebase to ensure that Shopify functioned as expected (content-related stuff, mostly, but this is a larger problem overall since we extend a generic theme we maintain in-house for every build which hopes to generically solve problems and unify developer experience across projects).</li>
+  <li>The client purchased the kiosk from another company which charges a monthly fee for remote administration of its Android-based hardware (we were unsure what this software provided OOTB and the client was upset that this wasn’t explained to them when purchasing the kiosk).</li>
+  <li>Related, we created a PWA and enabled gesture navigation &amp; app pinning on the device to make the experience during development match what we hoped would be a similar experience provided by the kiosk administration software.</li>
+  <li>We built app-like browsing navigation, i.e., ignored <code class="language-plaintext highlighter-rouge">window.history</code> entirely and rolled our own history library to allow users to only navigate back to the homepage.</li>
+  <li>We struggled with loading indication in the few places we asynchronously request content on another page and replace specific elements on the current page.</li>
+  <li>We had to rely on using the Android Emulator during development to ensure the changes we were making rendered correctly on-device.</li>
+  <li>Since this site was not intended to be publicly available, but only accessible via the kiosk, we need to ensure that the site is always password protected, but accessible to the kiosk.</li>
+</ol>
+
+<p>There’s likely more that I’m forgetting at the moment. The point is that Liquid themes support a more traditional commerce experience, i.e., user navigates to a website, adds stuff to their cart, and buys it. Hydrogen should more easily support a non-traditional commerce experience.</p>
+
+<p>If we just say “kiosk software will be written in Hydrogen” we blow a good amount of the problems out of the water but still run up against the kiosk administration issue. We don’t want the site rendered inside an obvious chrome window, so a PWA (at least) will be required. Working on Hydrogen gives us the added benefit of increasing our default starter template by way of <a href="https://storybook.js.org/">Storybook</a>. We maintain a difficult-to-maintain style guide already in our Shopify themes, but using Storybook for Shopify Themes would be untenable, due to the dependency on Shopify-specific liquid. We could, fairly easily, convert this style guide into Storybook and make it globally available to all Hydrogen builds. We could just as easily have localized Storybook instances for each project.</p>
+
+<p>For the remainder of the use-cases we could consider React Native. Apparently Remix has a way of defining their loaders to be specifically accessed via API only, so we could maintain a Hydrogen site and expose specific routes as API-only. There is also the <a href="https://github.com/Shopify/shopify-app-js/tree/main/packages/api-clients/storefront-api-client#readme"><code class="language-plaintext highlighter-rouge">storefront-api-client</code></a> to consider, which might bypass the need for Hydrogen entirely.</p>
+
+<h2 id="so-what-am-i-building">So what am I building?</h2>
+
+<p>Here’s what I think I should do:</p>
+
+<ol>
+  <li>Stand up a Hydrogen instance</li>
+  <li>Set up an installable PWA</li>
+  <li>Stand up Storybook, create a button, and use it throughout the site</li>
+  <li>Remove all unrelated code (with <a href="https://knip.dev/">knip</a>), informed by the needs of the current kiosk build I’m working on (no checkout, etc.)</li>
+  <li>Create a lines-of-code analysis between the two as a maintainability discussion point</li>
+</ol>
+
+<p>And as a stretch goal:</p>
+
+<ol>
+  <li>Stand up a React Native instance</li>
+  <li>Import and leverage the Storybook button</li>
+  <li>Pull collection page data from an API route in the Hydrogen instance</li>
+  <li>Pull product page data from the Storefront API Client</li>
+</ol>
+
+<p>Nice. That seems reasonable. Now if it wasn’t already Wednesday…</p>
+
+  </section>
+</article>
+</main>
+
+      
+    </div>
+  </body>
+</html>
