@@ -5,8 +5,28 @@
     <link>https://meowsus.github.io</link>
     <atom:link href="https://meowsus.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description></description>
-    <lastBuildDate>Thu, 12 Jun 2025 14:59:24 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Sep 2025 14:44:28 +0000</lastBuildDate>
     
+    
+    <item>
+      <title>Sunday</title>
+      <link>
+        https://meowsus.github.io/2025/09/21/Sunday.html
+      </link>
+      <description>
+        &lt;p&gt;This is going to be a long post and I don’t want it to be.&lt;/p&gt;
+
+&lt;p&gt;I have spent the last week thinking about forms in Next.js. It’s been a living nightmare. Every time I close my eyes they snap back open again and I think about server actions, client-side validation, error handling. Ugh. It won’t stop.&lt;/p&gt;
+
+&lt;p&gt;Let’s start at the beginning…&lt;/p&gt;
+
+&lt;h2 id=&...
+      </description>
+      <pubDate>Sun, 21 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>
+        https://meowsus.github.io/2025/09/21/Sunday.html
+      </guid>
+    </item>
     
     <item>
       <title>Saturday</title>

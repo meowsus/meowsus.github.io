@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBF765C7S5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'G-CBF765C7S5');
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>
+      Sunday
+      -
+      Welcome To Meow Town 🐱
+    </title>
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://meowsus.github.io/feed.xml">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script src="/assets/js/main.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Fira+Code:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    >
+
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body class="font-sans bg-slate-100">
+    <div class="container max-w-4xl mx-auto min-h-screen p-8 flex flex-col gap-8">
+      <header id="site-header">
+        <h1 aria-label="Welcome To Meow Town 🐱">
+          <a
+            class="text-xs flex items-center gap-2"
+            href="/"
+          >
+            <pre class="font-mono">
+ ,_     _
+ |\\_,-~/
+ / _  _ |    ,--.
+(  @  @ )   / ,-'
+ \  _T_/-._( (
+ /         `. \
+|         _  \ |
+ \ \ ,  /      |
+  || |-_\__   /
+ ((_/`(____,-'
+            </pre>
+          </a>
+        </h1>
+      </header>
+
+      <main id="main-content" class="flex-grow "><article>
+  <header class="mb-8">
+    <h1 class="text-2xl">
+      Sunday
+      
+        <span class="italic text-gray-600">or: it's 2025 and still forms are hard</span>
+      
+    </h1>
+
+    <p>
+      <time datetime="2025-09-21T00:00:00+00:00">September 21, 2025</time>
+    </p>
+  </header>
+  <section class="prose prose-lg max-w-4xl">
+    <p>This is going to be a long post and I don’t want it to be.</p>
+
+<p>I have spent the last week thinking about forms in Next.js. It’s been a living nightmare. Every time I close my eyes they snap back open again and I think about server actions, client-side validation, error handling. Ugh. It won’t stop.</p>
+
+<p>Let’s start at the beginning…</p>
+
+<h2 id="nextjs-hates-the-client">Next.js hates the client</h2>
+
+<p>That’s what I’ve come to understand, based on <a href="https://nextjs.org/docs/pages/guides/forms">their documentation</a>. In here you read things like</p>
+
+<blockquote>
+  <p>For client-side validation, you can use the HTML attributes like <code class="language-plaintext highlighter-rouge">required</code> and <code class="language-plaintext highlighter-rouge">type="email"</code> for basic validation.</p>
+</blockquote>
+
+<p>Cool. <em>Those</em> totally catch <em>everything</em> you need on the client… But whatever. I set forth accepting that I should start off with HTML form validation. We can just handle validation errors from the server with <code class="language-plaintext highlighter-rouge">useActionState</code>:</p>
+
+<blockquote>
+  <p>To display validation errors or messages, turn the component that defines the <code class="language-plaintext highlighter-rouge">&lt;form&gt;</code> into a Client Component and use React <code class="language-plaintext highlighter-rouge">useActionState</code>.</p>
+</blockquote>
+
+<p>This <em>is</em> a server component:</p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nf">Whatever</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">async</span> <span class="kd">function</span> <span class="nf">createFoo</span><span class="p">(</span><span class="nx">formData</span><span class="p">:</span> <span class="nx">FormData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">use server</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="c1">// do</span>
+    <span class="c1">// the</span>
+    <span class="c1">// things</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="p">=</span><span class="si">{</span><span class="nx">createFoo</span><span class="si">}</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>But the documentation tells us to make the component a client component in order to render validation messages. Something like:</p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="dl">"</span><span class="s2">use client</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">useActionState</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nf">Whatever</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">async</span> <span class="kd">function</span> <span class="nf">createFoo</span><span class="p">(</span><span class="nx">formData</span><span class="p">:</span> <span class="nx">FormData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">use server</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="c1">// do</span>
+    <span class="c1">// the</span>
+    <span class="c1">// things</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">state</span><span class="p">,</span> <span class="nx">formAction</span><span class="p">,</span> <span class="nx">pending</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useActionState</span><span class="p">(</span><span class="nx">createFoo</span><span class="p">,</span> <span class="p">{});</span>
+
+  <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="p">=</span><span class="si">{</span><span class="nx">formAction</span><span class="si">}</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Okay, but now our forms don’t work with JavaScript disabled. I mean, sure, it’s not realistic to pander to the 0.2% of crackpots worldwide who manually disable JavaScript but <a href="https://www.reddit.com/r/webdev/comments/48z7jz/comment/d0nxftd/">that’s not the whole story</a>.</p>
+
+<p>Call me old fashioned, but if I’m building a full-stack web application I’d like my forms to work out-of-the-box without the client being involved <em>first</em>, even if the experience isn’t all that great, and then progressively enhance that experience with JavaScript. It’s just the way I was raised.</p>
+
+<p>Ok, so how might I do this? Let’s walk back the implementation of a real example from <a href="https://github.com/meowsus/cookbook">the cookbook project</a> I’m working on:</p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">z</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">zod</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">auth</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/lib/auth</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">redirect</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">next/navigation</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">createSource</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/lib/db/sources</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">CreateSourceSchema</span> <span class="o">=</span> <span class="nx">z</span><span class="p">.</span><span class="nf">object</span><span class="p">({</span>
+  <span class="na">url</span><span class="p">:</span> <span class="nx">z</span><span class="p">.</span><span class="nf">url</span><span class="p">().</span><span class="nf">nonempty</span><span class="p">(),</span>
+<span class="p">});</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nf">CreateSourceForm</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">function</span> <span class="nf">createSourceAction</span><span class="p">(</span><span class="nx">formData</span><span class="p">:</span> <span class="nx">FormData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">parsedFormData</span> <span class="o">=</span> <span class="nx">CreateSourceSchema</span><span class="p">.</span><span class="nf">safeParse</span><span class="p">({</span>
+      <span class="na">url</span><span class="p">:</span> <span class="nx">formData</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">url</span><span class="dl">"</span><span class="p">),</span>
+    <span class="p">});</span>
+
+    <span class="k">if </span><span class="p">(</span><span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span>
+        <span class="na">error</span><span class="p">:</span> <span class="nx">z</span><span class="p">.</span><span class="nf">prettifyError</span><span class="p">(</span><span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">error</span><span class="p">),</span>
+        <span class="na">fields</span><span class="p">:</span> <span class="nb">Object</span><span class="p">.</span><span class="nf">fromEntries</span><span class="p">(</span><span class="nx">formData</span><span class="p">.</span><span class="nf">entries</span><span class="p">()),</span>
+      <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="p">{</span> <span class="nx">url</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+
+    <span class="k">await</span> <span class="nf">createSource</span><span class="p">({</span>
+      <span class="nx">url</span><span class="p">,</span>
+      <span class="na">user</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">connect</span><span class="p">:</span> <span class="p">{</span> <span class="na">id</span><span class="p">:</span> <span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="p">},</span>
+      <span class="p">},</span>
+    <span class="p">});</span>
+
+    <span class="nf">redirect</span><span class="p">(</span><span class="dl">"</span><span class="s2">/sources</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return </span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="p">=</span><span class="si">{</span><span class="nx">createSourceAction</span><span class="si">}</span> <span class="na">className</span><span class="p">=</span><span class="s">"space-y-2"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span> <span class="na">className</span><span class="p">=</span><span class="s">"flex gap-2"</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nc">Input</span>
+          <span class="na">name</span><span class="p">=</span><span class="s">"url"</span>
+          <span class="na">type</span><span class="p">=</span><span class="s">"url"</span>
+          <span class="na">placeholder</span><span class="p">=</span><span class="s">"https://example.com"</span>
+          <span class="na">required</span>
+        <span class="p">/&gt;</span>
+
+        <span class="p">&lt;</span><span class="nc">Button</span> <span class="na">type</span><span class="p">=</span><span class="s">"submit"</span><span class="p">&gt;</span>Add<span class="p">&lt;/</span><span class="nc">Button</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Okay. This <em>should</em> work, but will provide the user with zero feedback any of those guards get triggered or we run into an issue while saving the record to the database. Why? <em>Even PHP</em> can respond back to the same page and supply server-rendered error messages:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="c1">// Initialize variables</span>
+<span class="nv">$url</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="nv">$errors</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nv">$success</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+<span class="c1">// Check if form was submitted</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'REQUEST_METHOD'</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'POST'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Get form data</span>
+    <span class="nv">$url</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'url'</span><span class="p">]</span> <span class="o">??</span> <span class="s1">''</span><span class="p">);</span>
+
+    <span class="c1">// Validate URL</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$url</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$errors</span><span class="p">[</span><span class="s1">'url'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'URL is required'</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="o">!</span><span class="nb">filter_var</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="no">FILTER_VALIDATE_URL</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$errors</span><span class="p">[</span><span class="s1">'url'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'Please enter a valid URL'</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// If no errors, process the form</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$errors</span><span class="p">))</span> <span class="p">{</span>
+        <span class="c1">// Here you would typically save to database or process the URL</span>
+        <span class="c1">// For this example, we'll just show a success message</span>
+        <span class="nv">$success</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+        <span class="c1">// Clear form data on success</span>
+        <span class="nv">$url</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>URL Form<span class="nt">&lt;/h1&gt;</span>
+
+    <span class="cp">&lt;?php</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$success</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span>
+        <span class="nt">&lt;p&gt;&lt;strong&gt;</span>Success!<span class="nt">&lt;/strong&gt;</span> URL has been processed successfully.<span class="nt">&lt;/p&gt;</span>
+    <span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span>
+
+    <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action=</span><span class="s">""</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"url"</span><span class="nt">&gt;</span>URL:<span class="nt">&lt;/label&gt;</span>
+        <span class="nt">&lt;input</span>
+            <span class="na">type=</span><span class="s">"url"</span>
+            <span class="na">id=</span><span class="s">"url"</span>
+            <span class="na">name=</span><span class="s">"url"</span>
+            <span class="na">value=</span><span class="s">"</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span> <span class="cp">?&gt;</span><span class="s">"</span>
+        <span class="nt">&gt;</span>
+        <span class="cp">&lt;?php</span> <span class="k">if</span> <span class="p">(</span><span class="k">isset</span><span class="p">(</span><span class="nv">$errors</span><span class="p">[</span><span class="s1">'url'</span><span class="p">]))</span><span class="o">:</span> <span class="cp">?&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">"color: red;"</span><span class="nt">&gt;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$errors</span><span class="p">[</span><span class="s1">'url'</span><span class="p">]);</span> <span class="cp">?&gt;</span><span class="nt">&lt;/span&gt;</span>
+        <span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span>
+        <span class="nt">&lt;br&gt;&lt;br&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>Like, get it together, fellas… anyway…</p>
+
+<h2 id="nextjs-loves-the-client">Next.js loves the client</h2>
+
+<p>So my aforementioned opinion has pulled a one-eighty. Next.js loves the client. And that makes sense. I’m essentially saying, “Hey, Next, do you remember a decade-plus ago, when React came out, and the majority of the internet tripped and fell in a JavaScript hole? Yeah. Me neither.”</p>
+
+<p>Next is React. Sure, you can now write React on the backend and it’s compiled to HTML, but you better believe that they are going to smash their escape hatch button at the first sign of trouble. We’re not writing Single Page Applications backed solely by an API any longer, but we also don’t seem to be at a place of maturity with titans like, oh, [INSERT THE NAME OF ANY OTHER WEB FRAMEWORK HERE].</p>
+
+<p><code class="language-plaintext highlighter-rouge">/me dismounts soap box</code></p>
+
+<blockquote>
+  <p>React extends the HTML <code class="language-plaintext highlighter-rouge">&lt;form&gt;</code> element to allow Server Function to be invoked with the HTML <code class="language-plaintext highlighter-rouge">action</code> prop.</p>
+</blockquote>
+
+<p>Okay, so I take this to mean that my real example, above, which tries to create a source from a given URL, should work with JavaScript disabled. The action handles <em>all the things</em> from ensuring the user is authenticated, to making sure the URL is real (fun fact: did you know that <code class="language-plaintext highlighter-rouge">foo:</code> is technically a valid URL?), to creating the source, to redirecting. Everything a server action should do.</p>
+
+<p>And TypeScript hates it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Type '(formData: FormData) =&gt; Promise&lt;{ error: string; fields: { [k: string]: FormDataEntryValue; }; }&gt;' is not assignable to type 'string | ((formData: FormData) =&gt; void | Promise&lt;void&gt;) | undefined'.
+  Type '(formData: FormData) =&gt; Promise&lt;{ error: string; fields: { [k: string]: FormDataEntryValue; }; }&gt;' is not assignable to type '(formData: FormData) =&gt; void | Promise&lt;void&gt;'.
+    Type 'Promise&lt;{ error: string; fields: { [k: string]: FormDataEntryValue; }; }&gt;' is not assignable to type 'void | Promise&lt;void&gt;'.
+      Type 'Promise&lt;{ error: string; fields: { [k: string]: FormDataEntryValue; }; }&gt;' is not assignable to type 'Promise&lt;void&gt;'.
+        Type '{ error: string; fields: { [k: string]: FormDataEntryValue; }; }' is not assignable to type 'void'.ts(2322)
+</code></pre></div></div>
+
+<p>This TypeScript error is actually confirming everything: server actions, when passed directly to a form’s <code class="language-plaintext highlighter-rouge">action</code> prop, must return <code class="language-plaintext highlighter-rouge">void</code>. Ok. Whatever. I guess our only option is to throw errors?</p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nf">createSourceAction</span><span class="p">(</span><span class="nx">formData</span><span class="p">:</span> <span class="nx">FormData</span><span class="p">)</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">use server</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="kd">const</span> <span class="nx">session</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">auth</span><span class="p">();</span>
+
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">session</span><span class="p">?.</span><span class="nx">user</span><span class="p">?.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">You must be logged in to create a source</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="nx">parsedFormData</span> <span class="o">=</span> <span class="nx">CreateSourceFormDataSchema</span><span class="p">.</span><span class="nf">safeParse</span><span class="p">({</span>
+    <span class="na">url</span><span class="p">:</span> <span class="nx">formData</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">url</span><span class="dl">"</span><span class="p">),</span>
+  <span class="p">});</span>
+
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="nx">z</span><span class="p">.</span><span class="nf">prettifyError</span><span class="p">(</span><span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">error</span><span class="p">));</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="p">{</span> <span class="nx">url</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+
+  <span class="k">await</span> <span class="nf">createSource</span><span class="p">({</span>
+    <span class="nx">url</span><span class="p">,</span>
+    <span class="na">user</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">connect</span><span class="p">:</span> <span class="p">{</span> <span class="na">id</span><span class="p">:</span> <span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="p">},</span>
+    <span class="p">},</span>
+  <span class="p">});</span>
+
+  <span class="nf">redirect</span><span class="p">(</span><span class="dl">"</span><span class="s2">/sources</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This appeases the great <code class="language-plaintext highlighter-rouge">tsc</code>. And it works with and without JavaScript.</p>
+
+<p>But wait… didn’t I read something somewhere? <a href="https://nextjs.org/docs/app/getting-started/error-handling#server-functions">Oh yeah</a>.</p>
+
+<blockquote>
+  <p>For these errors, avoid using <code class="language-plaintext highlighter-rouge">try</code>/<code class="language-plaintext highlighter-rouge">catch</code> blocks and throw errors. Instead, model expected errors as return values.</p>
+</blockquote>
+
+<p>So all roads lead back to <code class="language-plaintext highlighter-rouge">useActionState</code>. My brain says it should. I mean, client components are still initially rendered by the server. We can get back to something closer to our initial example:</p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="dl">"</span><span class="s2">use client</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Button</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/components/ui/button</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Input</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/components/ui/input</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">auth</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/lib/auth</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">createSource</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/lib/db/sources</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">redirect</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">next/navigation</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">useActionState</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">z</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">zod</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">CreateSourceFormDataSchema</span> <span class="o">=</span> <span class="nx">z</span><span class="p">.</span><span class="nf">object</span><span class="p">({</span>
+  <span class="na">url</span><span class="p">:</span> <span class="nx">z</span><span class="p">.</span><span class="nf">url</span><span class="p">(),</span>
+<span class="p">});</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nf">CreateSourceForm</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">async</span> <span class="kd">function</span> <span class="nf">createSourceAction</span><span class="p">(</span><span class="nx">prevState</span><span class="p">:</span> <span class="nx">unknown</span><span class="p">,</span> <span class="nx">formData</span><span class="p">:</span> <span class="nx">FormData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">use server</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="kd">const</span> <span class="nx">session</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">auth</span><span class="p">();</span>
+
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">session</span><span class="p">?.</span><span class="nx">user</span><span class="p">?.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span>
+        <span class="na">error</span><span class="p">:</span> <span class="dl">"</span><span class="s2">You must be logged in to create a source</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">fields</span><span class="p">:</span> <span class="nb">Object</span><span class="p">.</span><span class="nf">fromEntries</span><span class="p">(</span><span class="nx">formData</span><span class="p">.</span><span class="nf">entries</span><span class="p">()),</span>
+      <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="nx">parsedFormData</span> <span class="o">=</span> <span class="nx">CreateSourceFormDataSchema</span><span class="p">.</span><span class="nf">safeParse</span><span class="p">({</span>
+      <span class="na">url</span><span class="p">:</span> <span class="nx">formData</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">url</span><span class="dl">"</span><span class="p">),</span>
+    <span class="p">});</span>
+
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span>
+        <span class="na">error</span><span class="p">:</span> <span class="nx">z</span><span class="p">.</span><span class="nf">prettifyError</span><span class="p">(</span><span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">error</span><span class="p">),</span>
+        <span class="na">fields</span><span class="p">:</span> <span class="nb">Object</span><span class="p">.</span><span class="nf">fromEntries</span><span class="p">(</span><span class="nx">formData</span><span class="p">.</span><span class="nf">entries</span><span class="p">()),</span>
+      <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="p">{</span> <span class="nx">url</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">parsedFormData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+
+    <span class="k">await</span> <span class="nf">createSource</span><span class="p">({</span>
+      <span class="nx">url</span><span class="p">,</span>
+      <span class="na">user</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">connect</span><span class="p">:</span> <span class="p">{</span> <span class="na">id</span><span class="p">:</span> <span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="p">},</span>
+      <span class="p">},</span>
+    <span class="p">});</span>
+
+    <span class="nf">redirect</span><span class="p">(</span><span class="dl">"</span><span class="s2">/sources</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">state</span><span class="p">,</span> <span class="nx">formAction</span><span class="p">,</span> <span class="nx">pending</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useActionState</span><span class="p">(</span><span class="nx">createSourceAction</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+
+  <span class="k">return </span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="p">=</span><span class="si">{</span><span class="nx">formAction</span><span class="si">}</span> <span class="na">className</span><span class="p">=</span><span class="s">"space-y-2"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span> <span class="na">className</span><span class="p">=</span><span class="s">"flex gap-2"</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nc">Input</span>
+          <span class="na">name</span><span class="p">=</span><span class="s">"url"</span>
+          <span class="na">type</span><span class="p">=</span><span class="s">"url"</span>
+          <span class="na">placeholder</span><span class="p">=</span><span class="s">"https://example.com"</span>
+          <span class="na">required</span>
+        <span class="p">/&gt;</span>
+
+        <span class="p">&lt;</span><span class="nc">Button</span> <span class="na">type</span><span class="p">=</span><span class="s">"submit"</span> <span class="na">disabled</span><span class="p">=</span><span class="si">{</span><span class="nx">pending</span><span class="si">}</span><span class="p">&gt;</span>
+          Add
+        <span class="p">&lt;/</span><span class="nc">Button</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+      <span class="si">{</span><span class="nx">state</span><span class="p">?.</span><span class="nx">error</span> <span class="o">&amp;&amp;</span> <span class="p">&lt;</span><span class="nt">p</span> <span class="na">className</span><span class="p">=</span><span class="s">"text-red-500"</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">error</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span><span class="si">}</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>But, we can’t. For some godless and evil reason, despite the documentation eluding to you being able to <code class="language-plaintext highlighter-rouge">"use server"</code> inside a client component, you can’t. You have to move your server action outside of the file and mark it with <code class="language-plaintext highlighter-rouge">"use server"</code>. Okay. Whatever.</p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="dl">"</span><span class="s2">use client</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Button</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/components/ui/button</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Input</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/components/ui/input</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">createSourceAction</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@/lib/actions/sources</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">useActionState</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nf">CreateSourceForm</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">state</span><span class="p">,</span> <span class="nx">formAction</span><span class="p">,</span> <span class="nx">pending</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useActionState</span><span class="p">(</span><span class="nx">createSourceAction</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+
+  <span class="k">return </span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="p">=</span><span class="si">{</span><span class="nx">formAction</span><span class="si">}</span> <span class="na">className</span><span class="p">=</span><span class="s">"space-y-2"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span> <span class="na">className</span><span class="p">=</span><span class="s">"flex gap-2"</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nc">Input</span>
+          <span class="na">name</span><span class="p">=</span><span class="s">"url"</span>
+          <span class="na">type</span><span class="p">=</span><span class="s">"url"</span>
+          <span class="na">placeholder</span><span class="p">=</span><span class="s">"https://example.com"</span>
+          <span class="na">defaultValue</span><span class="p">=</span><span class="si">{</span><span class="nx">state</span><span class="p">?.</span><span class="nx">fields</span><span class="p">?.</span><span class="nx">url</span> <span class="k">as</span> <span class="kr">string</span><span class="si">}</span>
+          <span class="na">required</span>
+        <span class="p">/&gt;</span>
+
+        <span class="p">&lt;</span><span class="nc">Button</span> <span class="na">type</span><span class="p">=</span><span class="s">"submit"</span> <span class="na">disabled</span><span class="p">=</span><span class="si">{</span><span class="nx">pending</span><span class="si">}</span><span class="p">&gt;</span>
+          Add
+        <span class="p">&lt;/</span><span class="nc">Button</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+      <span class="si">{</span><span class="nx">state</span><span class="p">?.</span><span class="nx">error</span> <span class="o">&amp;&amp;</span> <span class="p">&lt;</span><span class="nt">p</span> <span class="na">className</span><span class="p">=</span><span class="s">"text-red-500"</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">error</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span><span class="si">}</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Okay. Okay. This form works without JavaScript enabled. If I change the input’s <code class="language-plaintext highlighter-rouge">type</code> to <code class="language-plaintext highlighter-rouge">text</code> and input anything other than a valid URL we see an error message after a full-page refresh.</p>
+
+<p>Sorry I doubted you, Next. I’m sorry that I implied that PHP is better than you. I swear I tried this before… I’ve tried everything this week.</p>
+
+  </section>
+</article>
+</main>
+
+      
+    </div>
+  </body>
+</html>
