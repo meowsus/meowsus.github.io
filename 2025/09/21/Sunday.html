@@ -428,7 +428,92 @@
 
 <p>Sorry I doubted you, Next. I’m sorry that I implied that PHP is better than you. I swear I tried this before… I’ve tried everything this week.</p>
 
-<p>I’m going to clip here, because my kid is constipated and is staying home from school today, but I’ll need to revisit how I went from this <a href="https://github.com/meowsus/cookbook/pull/33">to this</a> in a follow-up post.</p>
+<p>Lesson learned: I’ll never trust myself again.</p>
+
+<h2 id="a-couple-more-things">A couple more things</h2>
+
+<p>Now that I’ve proven myself to be an idiot, and I’ve hopefully proven the same to you, I’ll briefly explain how I got to <a href="https://github.com/meowsus/cookbook/pull/33">this monstrosity</a>.</p>
+
+<p>First, submitting a URL already attached to a Source will throw a <code class="language-plaintext highlighter-rouge">Prisma.PrismaClientKnownRequestError</code>. Without a <code class="language-plaintext highlighter-rouge">try</code>/<code class="language-plaintext highlighter-rouge">catch</code> block in place, we won’t be able to recover from the error. It triggers the error boundary. Unideal. I’d rather display the server error like I would any other error.</p>
+
+<p>This led me to <a href="https://next-safe-action.dev/">next-safe-action</a> which touts the ability to just run the damn action with impunity and catch all manner of errors in buckets like <code class="language-plaintext highlighter-rouge">validationError</code> and <code class="language-plaintext highlighter-rouge">serverError</code>. This felt good. I was able to abstract away the authentication bit into the safe action client, like so:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span>
+  <span class="nx">createSafeActionClient</span><span class="p">,</span>
+  <span class="nx">DEFAULT_SERVER_ERROR_MESSAGE</span><span class="p">,</span>
+<span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">next-safe-action</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">auth</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./auth</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">z</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">zod</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Prisma</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../../generated/prisma</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ActionError</span> <span class="kd">extends</span> <span class="nc">Error</span> <span class="p">{}</span>
+
+<span class="k">export</span> <span class="kd">const</span> <span class="nx">actionClient</span> <span class="o">=</span> <span class="nf">createSafeActionClient</span><span class="p">({</span>
+  <span class="nf">defineMetadataSchema</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">z</span><span class="p">.</span><span class="nf">object</span><span class="p">({</span>
+      <span class="na">actionName</span><span class="p">:</span> <span class="nx">z</span><span class="p">.</span><span class="nf">string</span><span class="p">(),</span>
+    <span class="p">});</span>
+  <span class="p">},</span>
+  <span class="na">handleServerError</span><span class="p">:</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+
+    <span class="k">if </span><span class="p">(</span><span class="nx">error</span> <span class="k">instanceof</span> <span class="nx">ActionError</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="na">error</span><span class="p">:</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="k">if </span><span class="p">(</span><span class="nx">error</span> <span class="k">instanceof</span> <span class="nx">Prisma</span><span class="p">.</span><span class="nx">PrismaClientKnownRequestError</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="na">error</span><span class="p">:</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">{</span> <span class="na">error</span><span class="p">:</span> <span class="nx">DEFAULT_SERVER_ERROR_MESSAGE</span> <span class="p">};</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="k">export</span> <span class="kd">const</span> <span class="nx">authActionClient</span> <span class="o">=</span> <span class="nx">actionClient</span><span class="p">.</span><span class="nf">use</span><span class="p">(</span><span class="k">async </span><span class="p">({</span> <span class="nx">next</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">session</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">auth</span><span class="p">();</span>
+
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">session</span><span class="p">?.</span><span class="nx">user</span><span class="p">?.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Unauthorized</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="k">await</span> <span class="nf">next</span><span class="p">({</span>
+    <span class="na">ctx</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">userId</span><span class="p">:</span> <span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>And build my action thusly:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">const</span> <span class="nx">createSourceAction</span> <span class="o">=</span> <span class="nx">authActionClient</span>
+  <span class="p">.</span><span class="nf">metadata</span><span class="p">({</span> <span class="na">actionName</span><span class="p">:</span> <span class="dl">"</span><span class="s2">createSourceAction</span><span class="dl">"</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nf">inputSchema</span><span class="p">(</span><span class="nx">CreateSourceSchema</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">action</span><span class="p">(</span><span class="k">async </span><span class="p">({</span> <span class="na">parsedInput</span><span class="p">:</span> <span class="p">{</span> <span class="nx">url</span> <span class="p">},</span> <span class="nx">ctx</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">source</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">createSource</span><span class="p">({</span>
+      <span class="nx">url</span><span class="p">,</span>
+      <span class="na">user</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">connect</span><span class="p">:</span> <span class="p">{</span> <span class="na">id</span><span class="p">:</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">userId</span> <span class="p">},</span>
+      <span class="p">},</span>
+    <span class="p">});</span>
+
+    <span class="nf">redirect</span><span class="p">(</span><span class="s2">`/sources/</span><span class="p">${</span><span class="nx">source</span><span class="p">.</span><span class="nx">id</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="p">});</span>
+</code></pre></div></div>
+
+<p>Much cleaner. Now I can use <code class="language-plaintext highlighter-rouge">authActionClient</code> to ensure the user is present in the session and grab it out of context, as needed. I also don’t need to check that the fields are valid, since <code class="language-plaintext highlighter-rouge">next-safe-action</code> handles that with the <code class="language-plaintext highlighter-rouge">inputSchema()</code> instance method.</p>
+
+<p>But I am losing something here… <code class="language-plaintext highlighter-rouge">fields</code>. For the life of me I couldn’t figure out how to return the submitted form state back to the browser if something went awry. I chalk this up to <a href="https://next-safe-action.dev/docs/recipes/form-actions">their form action documentation being dogshit</a>. Zero real-world examples here. Like, where can I collect the form data submitted by the user without collecting it myself? And how would I return that previously submitted form data back to the browser if the source creation step failed without using a <code class="language-plaintext highlighter-rouge">try</code>/<code class="language-plaintext highlighter-rouge">catch</code> block?</p>
+
+<p>That experiment failed so hard that I wound up just red-pilling myself into using <a href="https://react-hook-form.com/">React Hook Form</a> alongside the <a href="https://github.com/next-safe-action/adapter-react-hook-form"><code class="language-plaintext highlighter-rouge">next-safe-action/adapter-react-hook-form</code></a>. It works. It’s pretty chubby. I’m not happy with it. I wanted to keep things simple.</p>
+
+<p>Another reason why I caved and used React Hook Form was because <a href="https://ui.shadcn.com/">ShadCN</a>, the component library I wanted to work with, forces an RHF dependency with their <code class="language-plaintext highlighter-rouge">Form</code> component. More dogshit.</p>
+
+<p>I should really take another run at this. I should use <a href="https://daisyui.com/">daisyUI</a> or something more agnostic for the components. I should really dig deeper into <code class="language-plaintext highlighter-rouge">next-safe-action</code> to figure out how to always return the submitted, unparsed form data from the server back to the client. Essentially, I should be able to use the form’s <code class="language-plaintext highlighter-rouge">action</code> prop as intended without having to jump through a million hoops and should never be forced to use <code class="language-plaintext highlighter-rouge">onSubmit</code>. Truly I could get by with HTML form validation if I could consistently return the previous values from a form submission back to the client if we encounter an error state.</p>
+
+<p>This has been my cycle this week: I want this, it doesn’t seem like I can have this, I give up, oh wait, what about this, let me try that, that doesn’t work either, I give up, oh wait…</p>
+
+<p>It really shouldn’t be this hard.</p>
 
   </section>
 </article>
